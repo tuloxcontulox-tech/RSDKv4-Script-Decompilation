@@ -11,6 +11,7 @@
 // Aliases
 // ========================
 
+private alias object.value20 : object.laughPlayed
 private alias object.value0  : object.timer
 private alias object.value1  : object.health
 private alias object.value2  : object.invincibilityTimer

@@ -11,6 +11,7 @@
 // Aliases
 // ========================
 
+private alias object.value20 : object.laughPlayed
 private alias object.value0  : object.originPos.x
 private alias object.value1  : object.originPos.y
 private alias object.value2  : object.defeated
