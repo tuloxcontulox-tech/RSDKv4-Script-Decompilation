@@ -393,6 +393,7 @@ event ObjectDraw
 			object[+1].xpos 	= screen.xcenter
 			object[+1].ypos 	= 192
 			object.state        = LOGO_FINGERWIGGLE_SONIC
+			object.timer        = 0 // reset timer to use for sequential animation
 		end if
 
 		SetScreenFade(0x00, 0x00, 0x00, object.timer)
@@ -400,11 +401,31 @@ event ObjectDraw
 
 	case LOGO_FINGERWIGGLE_SONIC
 		screen.xoffset += 2
+		object.timer++
 		break
 	end switch
 
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
+
+	// Sequential del-ta-rune logo draw
+	if object.timer >= 15
+		temp0 = screen.xcenter
+		temp0 -= 80
+		DrawSpriteScreenXY(10, temp0, screen.ycenter)
+	end if
+
+	if object.timer >= 30
+		temp0 = screen.xcenter
+		temp0 -= 18
+		DrawSpriteScreenXY(12, temp0, screen.ycenter)
+	end if
+
+	if object.timer >= 45
+		temp0 = screen.xcenter
+		temp0 += 62
+		DrawSpriteScreenXY(13, temp0, screen.ycenter)
+	end if
 
 	// Copyright Sprite / Dami_2o11 Credit
 	DrawSpriteScreenXY(11, screen.xcenter, 216)
@@ -424,10 +445,10 @@ event ObjectStartup
 	SpriteFrame(-36, -76, 81, 88, 1, 90) 		// Sonic - Frame 8 		- #7
 	SpriteFrame(-36, -76, 81, 88, 83, 90) 		// Sonic - Frame 9 		- #8
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #9
-	SpriteFrame(-112, -17, 224, 34, 268, 462) 	// Logo (Bottom) / Dark Logo	- #10
-	SpriteFrame(-55, -11, 110, 23, 194, 259) 	// Copyright Sprite / Dami_2o11 Credit	- #11
-	SpriteFrame(24, 16, 56, 64, 276, 360) 		// Tails - Frame 1		- #12
-	SpriteFrame(3, 21, 89, 57, 165, 90) 		// Tails - Frame 2		- #13
+	SpriteFrame(-31, -17, 63, 34, 268, 462) 	// #10 (DEL)
+	SpriteFrame(-34, -6, 69, 13, 0, 499) 		// #11 (Dami_2o11 Credit)
+	SpriteFrame(-27, -17, 54, 34, 335, 462) 	// #12 (TA)
+	SpriteFrame(-49, -17, 99, 34, 393, 462) 	// #13 (RUNE)
 	SpriteFrame(8, 16, 88, 61, 165, 148) 		// Tails - Frame 3		- #14
 	SpriteFrame(6, 17, 89, 59, 333, 360) 		// Tails - Frame 4		- #15
 	SpriteFrame(6, 12, 87, 65, 423, 360) 		// Tails - Frame 5		- #16
