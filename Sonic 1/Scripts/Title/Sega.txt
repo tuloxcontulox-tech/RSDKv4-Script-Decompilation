@@ -208,7 +208,7 @@ event ObjectUpdate
 
 		case SEGA_SEGASCREEN
 			sega.timer++
-			if sega.timer == 160
+			if sega.timer == 480
 				sega.timer = 0
 				object.state = SEGA_FADEOUT
 			end if
@@ -242,7 +242,7 @@ end event
 
 event ObjectDraw
 	// Draw White BG
-	DrawRect(0, 0, screen.xsize, screen.ysize, 0x00, 0x00, 0x00, 0xFF)
+	DrawRect(0, 0, screen.xsize, screen.ysize, 0xE0, 0xE0, 0xE0, 0xFF)
 
 	// Draw Sega Sprite
 	if object.alpha > 8
@@ -254,23 +254,23 @@ event ObjectDraw
 		temp0 = sega.peekPos
 		temp0 -= 10
 		temp0 -= screen.xsize
-		DrawRect(temp0, 91, screen.xsize, 58, 0x00, 0x00, 0x00, 0xFF)
+		DrawRect(temp0, 91, screen.xsize, 58, 0xE0, 0xE0, 0xE0, 0xFF)
 
 		temp0 = sega.peekPos
 		temp0 -= 10
-		DrawRect(temp0, 91, 4, 58, 0x00, 0x00, 0x00, 0xC0)
+		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xC0)
 
 		temp0 += 4
-		DrawRect(temp0, 91, 4, 58, 0x00, 0x00, 0x00, 0xA0)
+		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xA0)
 
 		temp0 += 8
-		DrawRect(temp0, 91, 4, 58, 0x00, 0x00, 0x00, 0xA0)
+		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xA0)
 
 		temp0 += 4
-		DrawRect(temp0, 91, 4, 58, 0x00, 0x00, 0x00, 0xC0)
+		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xC0)
 
 		temp0 += 4
-		DrawRect(temp0, 91, screen.xsize, 58, 0x00, 0x00, 0x00, 0xFF)
+		DrawRect(temp0, 91, screen.xsize, 58, 0xE0, 0xE0, 0xE0, 0xFF)
 
 		DrawSpriteScreenXY(1, screen.xcenter, screen.ycenter)
 	end if
@@ -279,8 +279,8 @@ end event
 
 event ObjectStartup
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-55, -11, 110, 23, 194, 259)
-	SpriteFrame(-55, -11, 110, 23, 194, 259)
+	SpriteFrame(-93, -29, 188, 58, 323, 242)
+	SpriteFrame(-125, -29, 252, 58, 259, 301)
 	
 	// Hide touch controls
 	options.touchControls = false
@@ -298,7 +298,7 @@ end event
 
 event RSDKLoad
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-55, -11, 110, 23, 194, 259)
+	SpriteFrame(-93, -29, 188, 58, 323, 242)
 	
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

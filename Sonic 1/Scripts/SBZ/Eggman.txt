@@ -108,6 +108,9 @@ event ObjectUpdate
 		break
 
 	case SBZEGGMAN_ANI_LAUGH
+		if object.animationTimer == 0
+			PlaySfx(SfxName[EggLaugh], false)
+		end if
 		object.animationTimer++
 		if object.animationTimer == 14
 			object.animationTimer = 0

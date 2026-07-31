@@ -406,10 +406,8 @@ event ObjectDraw
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
-	// Copyright Sprite
-	temp0 = screen.xsize
-	temp0 -= 96
-	DrawSpriteScreenXY(11, temp0, 216)
+	// Copyright Sprite / Dami_2o11 Credit
+	DrawSpriteScreenXY(11, screen.xcenter, 216)
 end event
 
 event ObjectStartup
@@ -427,7 +425,7 @@ event ObjectStartup
 	SpriteFrame(-36, -76, 81, 88, 83, 90) 		// Sonic - Frame 9 		- #8
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #9
 	SpriteFrame(-112, -17, 224, 34, 268, 462) 	// Logo (Bottom) / Dark Logo	- #10
-	SpriteFrame(0, 0, 71, 17, 182, 210) 		// Copyright Sprite		- #11
+	SpriteFrame(-55, -11, 110, 23, 194, 259) 	// Copyright Sprite / Dami_2o11 Credit	- #11
 	SpriteFrame(24, 16, 56, 64, 276, 360) 		// Tails - Frame 1		- #12
 	SpriteFrame(3, 21, 89, 57, 165, 90) 		// Tails - Frame 2		- #13
 	SpriteFrame(8, 16, 88, 61, 165, 148) 		// Tails - Frame 3		- #14

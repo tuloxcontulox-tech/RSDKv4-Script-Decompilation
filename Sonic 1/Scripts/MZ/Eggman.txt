@@ -414,7 +414,6 @@ event ObjectUpdate
 					if object.animation != MZEGGANI_LAUGH
 						object.animation = MZEGGANI_LAUGH
 						object.animationTimer = 0
-						PlaySfx(SfxName[EggLaugh], false)
 					end if
 				end if
 
@@ -496,6 +495,9 @@ event ObjectDraw
 		break
 
 	case MZEGGANI_LAUGH
+		if object.animationTimer == 0
+			PlaySfx(SfxName[EggLaugh], false)
+		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
 		temp0 /= 5
@@ -511,6 +513,9 @@ event ObjectDraw
 		break
 
 	case MZEGGANI_LAUGH_LOOP
+		if object.animationTimer == 0
+			PlaySfx(SfxName[EggLaugh], false)
+		end if
 		temp0 = object.animationTimer
 		temp0 /= 5
 		temp0 += 9

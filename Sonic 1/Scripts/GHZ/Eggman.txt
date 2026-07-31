@@ -487,7 +487,6 @@ event ObjectUpdate
 				if object.animation != GHZEGGANI_LAUGH
 					object.animation = GHZEGGANI_LAUGH
 					object.animationTimer = 0
-					PlaySfx(SfxName[EggLaugh], false)
 				end if
 			end if
 
@@ -582,6 +581,9 @@ event ObjectDraw
 		break
 
 	case GHZEGGANI_LAUGH
+		if object.animationTimer == 0
+			PlaySfx(SfxName[EggLaugh], false)
+		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
 		temp0 /= 5
