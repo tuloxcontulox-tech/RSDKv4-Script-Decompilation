@@ -100,10 +100,7 @@ event ObjectUpdate
 			end if
 #endplatform
 		else
-			object.attractTimer++
-			if object.attractTimer == 360
-				object.state = START_STARTATTRACT
-			end if
+			object.attractTimer = 0
 		end if
 		break
 
@@ -272,18 +269,8 @@ event ObjectStartup
 	
 	LoadSpriteSheet("Title/Title.gif")
 	
-	// In the original S1 releases this was instead a engine.language switch for different languages, although all cases led to the same path
-	
-	switch engine.deviceType
-	case STANDARD
-		SpriteFrame(-48, -4, 96, 8, 1, 283)
-		break
-
-	case MOBILE
-		SpriteFrame(-56, -4, 112, 8, 1, 292)
-		break
-		
-	end switch
+	// Use the "♥Proceed" sprite from Title.gif (x=20, y=259, width=69, height=12)
+	SpriteFrame(-35, -6, 69, 12, 20, 259)
 end event
 
 
@@ -298,7 +285,7 @@ end event
 
 event RSDKLoad
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-48, -4, 96, 8, 1, 283)
+	SpriteFrame(-35, -6, 69, 12, 20, 259)
 	
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event
