@@ -117,49 +117,64 @@ event ObjectDraw
 	// Draw Solid Black Background
 	DrawRect(0, 0, screen.xsize, screen.ysize, 0x00, 0x00, 0x00, 0xFF)
 
-	// Draw DEL
-	if sega.timer >= 27
-		if sega.timer < 57
-			temp0 = sega.timer
-			temp0 -= 27
-			temp0 *= 8
-			object.alpha = temp0
-		else
-			object.alpha = 255
-		end if
+	if object.state == SEGA_FADEOUT
+		object.alpha = 255
 		temp1 = screen.xcenter
 		temp1 -= 80
 		DrawSpriteScreenFX(0, FX_INK, temp1, screen.ycenter)
-	end if
 
-	// Draw TA
-	if sega.timer >= 60
-		if sega.timer < 90
-			temp0 = sega.timer
-			temp0 -= 60
-			temp0 *= 8
-			object.alpha = temp0
-		else
-			object.alpha = 255
-		end if
 		temp1 = screen.xcenter
 		temp1 -= 18
 		DrawSpriteScreenFX(1, FX_INK, temp1, screen.ycenter)
-	end if
 
-	// Draw RUNE
-	if sega.timer >= 120
-		if sega.timer < 150
-			temp0 = sega.timer
-			temp0 -= 120
-			temp0 *= 8
-			object.alpha = temp0
-		else
-			object.alpha = 255
-		end if
 		temp1 = screen.xcenter
 		temp1 += 62
 		DrawSpriteScreenFX(2, FX_INK, temp1, screen.ycenter)
+	else
+		// Draw DEL
+		if sega.timer >= 27
+			if sega.timer < 57
+				temp0 = sega.timer
+				temp0 -= 27
+				temp0 *= 8
+				object.alpha = temp0
+			else
+				object.alpha = 255
+			end if
+			temp1 = screen.xcenter
+			temp1 -= 80
+			DrawSpriteScreenFX(0, FX_INK, temp1, screen.ycenter)
+		end if
+
+		// Draw TA
+		if sega.timer >= 60
+			if sega.timer < 90
+				temp0 = sega.timer
+				temp0 -= 60
+				temp0 *= 8
+				object.alpha = temp0
+			else
+				object.alpha = 255
+			end if
+			temp1 = screen.xcenter
+			temp1 -= 18
+			DrawSpriteScreenFX(1, FX_INK, temp1, screen.ycenter)
+		end if
+
+		// Draw RUNE
+		if sega.timer >= 120
+			if sega.timer < 150
+				temp0 = sega.timer
+				temp0 -= 120
+				temp0 *= 8
+				object.alpha = temp0
+			else
+				object.alpha = 255
+			end if
+			temp1 = screen.xcenter
+			temp1 += 62
+			DrawSpriteScreenFX(2, FX_INK, temp1, screen.ycenter)
+		end if
 	end if
 end event
 

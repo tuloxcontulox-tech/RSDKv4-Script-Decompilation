@@ -391,7 +391,7 @@ event ObjectDraw
 			object[+1].type 	= TypeName[Start Message]
 			object[+1].priority = PRIORITY_ACTIVE
 			object[+1].xpos 	= screen.xcenter
-			object[+1].ypos 	= 192
+			object[+1].ypos 	= 140
 			object.state        = LOGO_FINGERWIGGLE_SONIC
 			object.timer        = 0 // reset timer to use for sequential animation
 		end if
@@ -408,8 +408,10 @@ event ObjectDraw
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
-	// Copyright Sprite / Dami_2o11 Credit
-	DrawSpriteScreenXY(11, screen.xcenter, 216)
+	// Copyright Sprite / Dami_2o11 Credit (moved to bottom-right corner)
+	temp0 = screen.xsize
+	temp0 -= 38
+	DrawSpriteScreenXY(11, temp0, 216)
 end event
 
 event ObjectStartup
