@@ -9,6 +9,8 @@
 // Aliases
 // ========================
 
+private alias 1 : PRIORITY_ACTIVE
+
 private alias object.value0  : object.timer
 private alias object.value1  : object.playerPos.x
 private alias object.value2  : object.playerPos.y
