@@ -406,11 +406,6 @@ event ObjectDraw
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
-	// Draw the dark font 'deltarune' logo on top
-	temp0 = screen.ycenter
-	temp0 -= 27
-	DrawSpriteScreenXY(10, screen.xcenter, temp0)
-
 	// Copyright Sprite
 	temp0 = screen.xsize
 	temp0 -= 96

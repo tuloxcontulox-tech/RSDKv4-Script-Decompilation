@@ -487,6 +487,7 @@ event ObjectUpdate
 				if object.animation != GHZEGGANI_LAUGH
 					object.animation = GHZEGGANI_LAUGH
 					object.animationTimer = 0
+					PlaySfx(SfxName[EggLaugh], false)
 				end if
 			end if
 

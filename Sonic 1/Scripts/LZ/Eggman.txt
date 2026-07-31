@@ -386,6 +386,7 @@ event ObjectUpdate
 					if object.animation != LZEGGANI_LAUGH
 						object.animation = LZEGGANI_LAUGH
 						object.animationTimer = 0
+						PlaySfx(SfxName[EggLaugh], false)
 					end if
 
 					if currentPlayer == 0
