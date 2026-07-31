@@ -481,6 +481,12 @@ end event
 
 
 event ObjectDraw
+	temp0 = true
+	if object.animation != MZEGGANI_LAUGH
+		if object.animation != MZEGGANI_LAUGH_LOOP
+			object.laughPlayed = false
+		end if
+	end if
 	switch object.animation
 	default
 	case MZEGGANI_INVISIBLE
@@ -495,8 +501,9 @@ event ObjectDraw
 		break
 
 	case MZEGGANI_LAUGH
-		if object.animationTimer == 0
+		if object.laughPlayed == false
 			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
 		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
@@ -513,8 +520,9 @@ event ObjectDraw
 		break
 
 	case MZEGGANI_LAUGH_LOOP
-		if object.animationTimer == 0
+		if object.laughPlayed == false
 			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
 		end if
 		temp0 = object.animationTimer
 		temp0 /= 5

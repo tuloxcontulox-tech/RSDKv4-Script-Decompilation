@@ -569,6 +569,11 @@ end event
 
 
 event ObjectDraw
+	if object.animation != SYZEGGANI_LAUGH
+		if object.animation != SYZEGGANI_LAUGH_LOOP
+			object.laughPlayed = false
+		end if
+	end if
 	temp0 = object.ypos
 	temp0 += object.stingerPos
 	DrawSpriteFX(19, FX_FLIP, object.xpos, temp0)
@@ -587,8 +592,9 @@ event ObjectDraw
 		break
 
 	case SYZEGGANI_LAUGH
-		if object.animationTimer == 0
+		if object.laughPlayed == false
 			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
 		end if
 		temp0 = object.animationTimer
 		temp0 %= 10

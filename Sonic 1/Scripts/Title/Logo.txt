@@ -408,25 +408,6 @@ event ObjectDraw
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
-	// Sequential del-ta-rune logo draw
-	if object.timer >= 15
-		temp0 = screen.xcenter
-		temp0 -= 80
-		DrawSpriteScreenXY(10, temp0, screen.ycenter)
-	end if
-
-	if object.timer >= 30
-		temp0 = screen.xcenter
-		temp0 -= 18
-		DrawSpriteScreenXY(12, temp0, screen.ycenter)
-	end if
-
-	if object.timer >= 45
-		temp0 = screen.xcenter
-		temp0 += 62
-		DrawSpriteScreenXY(13, temp0, screen.ycenter)
-	end if
-
 	// Copyright Sprite / Dami_2o11 Credit
 	DrawSpriteScreenXY(11, screen.xcenter, 216)
 end event

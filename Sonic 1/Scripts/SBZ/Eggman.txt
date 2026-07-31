@@ -12,6 +12,8 @@
 // Aliases
 // ========================
 
+private alias object.value20 : object.laughPlayed
+
 private alias object.value0 : object.timer
 private alias object.value1 : object.invincibilityTimer
 
@@ -51,6 +53,9 @@ private alias 2 : MUSICEVENT_TRANSITION
 // ========================
 
 event ObjectUpdate
+	if object.animation != SBZEGGMAN_ANI_LAUGH
+		object.laughPlayed = false
+	end if
 	// Handle States
 	switch object.state
 	case SBZEGGMAN_WAITING
@@ -108,8 +113,9 @@ event ObjectUpdate
 		break
 
 	case SBZEGGMAN_ANI_LAUGH
-		if object.animationTimer == 0
+		if object.laughPlayed == false
 			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
 		end if
 		object.animationTimer++
 		if object.animationTimer == 14

@@ -450,6 +450,9 @@ end event
 
 
 event ObjectDraw
+	if object.animation != LZEGGANI_LAUGH
+		object.laughPlayed = false
+	end if
 	switch object.animation
 	default
 	case LZEGGANI_INVISIBLE
@@ -464,8 +467,9 @@ event ObjectDraw
 		break
 
 	case LZEGGANI_LAUGH
-		if object.animationTimer == 0
+		if object.laughPlayed == false
 			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
 		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
