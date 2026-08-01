@@ -409,21 +409,25 @@ event ObjectDraw
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
-	// Animate bottom part of the background by cycling strip overlays
+	// Animate bottom part of the background by cycling strip overlays (aligned perfectly)
 	temp0 = object.animationTimer
 	temp0 /= 10
 	temp0 %= 3
 
 	if temp0 == 1
-		temp1 = screen.ycenter
-		temp1 += 84
-		DrawSpriteScreenXY(12, screen.xcenter, temp1)
+		temp1 = screen.xcenter
+		temp1 += 4
+		temp2 = screen.ycenter
+		temp2 += 99
+		DrawSpriteScreenXY(12, temp1, temp2)
 	end if
 
 	if temp0 == 2
-		temp1 = screen.ycenter
-		temp1 += 84
-		DrawSpriteScreenXY(13, screen.xcenter, temp1)
+		temp1 = screen.xcenter
+		temp1 += 4
+		temp2 = screen.ycenter
+		temp2 += 99
+		DrawSpriteScreenXY(13, temp1, temp2)
 	end if
 
 	// Copyright Sprite / Dami_2o11 Credit (moved to bottom-right corner)
