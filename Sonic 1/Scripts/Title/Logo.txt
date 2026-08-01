@@ -393,7 +393,7 @@ event ObjectDraw
 			object[+1].xpos 	= screen.xcenter
 			object[+1].ypos 	= 140
 			object.state        = LOGO_FINGERWIGGLE_SONIC
-			object.timer        = 0 // reset timer to use for sequential animation
+			object.timer        = 0 // reset timer
 		end if
 
 		SetScreenFade(0x00, 0x00, 0x00, object.timer)
@@ -402,11 +402,29 @@ event ObjectDraw
 	case LOGO_FINGERWIGGLE_SONIC
 		screen.xoffset += 2
 		object.timer++
+		object.animationTimer++
 		break
 	end switch
 
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
+
+	// Animate bottom part of the background by cycling strip overlays
+	temp0 = object.animationTimer
+	temp0 /= 10
+	temp0 %= 3
+
+	if temp0 == 1
+		temp1 = screen.ycenter
+		temp1 += 84
+		DrawSpriteScreenXY(12, screen.xcenter, temp1)
+	end if
+
+	if temp0 == 2
+		temp1 = screen.ycenter
+		temp1 += 84
+		DrawSpriteScreenXY(13, screen.xcenter, temp1)
+	end if
 
 	// Copyright Sprite / Dami_2o11 Credit (moved to bottom-right corner)
 	temp0 = screen.xsize
@@ -430,8 +448,8 @@ event ObjectStartup
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #9
 	SpriteFrame(-31, -17, 63, 34, 268, 462) 	// #10 (DEL)
 	SpriteFrame(-34, -6, 69, 13, 0, 499) 		// #11 (Dami_2o11 Credit)
-	SpriteFrame(-27, -17, 54, 34, 335, 462) 	// #12 (TA)
-	SpriteFrame(-49, -17, 99, 34, 393, 462) 	// #13 (RUNE)
+	SpriteFrame(-160, -35, 320, 70, 0, 303) 	// #12 (Strip 1)
+	SpriteFrame(-160, -35, 320, 70, 0, 374) 	// #13 (Strip 2)
 	SpriteFrame(8, 16, 88, 61, 165, 148) 		// Tails - Frame 3		- #14
 	SpriteFrame(6, 17, 89, 59, 333, 360) 		// Tails - Frame 4		- #15
 	SpriteFrame(6, 12, 87, 65, 423, 360) 		// Tails - Frame 5		- #16

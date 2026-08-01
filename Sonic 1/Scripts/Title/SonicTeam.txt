@@ -85,7 +85,7 @@ event ObjectStartup
 	LoadSpriteSheet("Title/Title.gif")
 	
 	// 0 - Sonic Team presents
-	SpriteFrame(-76, -24, 148, 40, 174, 259)
+	SpriteFrame(-55, -13, 110, 26, 9, 204)
 	
 	// 1 - Secret Dev Credits
 	SpriteFrame(-256, -128, 512, 256, 0, 0)
@@ -103,7 +103,7 @@ end event
 
 event RSDKLoad
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-76, -24, 148, 40, 174, 259)
+	SpriteFrame(-55, -13, 110, 26, 9, 204)
 	
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event
