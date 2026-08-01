@@ -448,8 +448,8 @@ event ObjectStartup
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #9
 	SpriteFrame(-31, -17, 63, 34, 268, 462) 	// #10 (DEL)
 	SpriteFrame(-34, -6, 69, 13, 0, 499) 		// #11 (Dami_2o11 Credit)
-	SpriteFrame(-160, -35, 320, 70, 0, 303) 	// #12 (Strip 1)
-	SpriteFrame(-160, -35, 320, 70, 0, 374) 	// #13 (Strip 2)
+	SpriteFrame(-110, -35, 220, 70, 50, 303) 	// #12 (Strip 1)
+	SpriteFrame(-110, -35, 220, 70, 50, 374) 	// #13 (Strip 2)
 	SpriteFrame(8, 16, 88, 61, 165, 148) 		// Tails - Frame 3		- #14
 	SpriteFrame(6, 17, 89, 59, 333, 360) 		// Tails - Frame 4		- #15
 	SpriteFrame(6, 12, 87, 65, 423, 360) 		// Tails - Frame 5		- #16
