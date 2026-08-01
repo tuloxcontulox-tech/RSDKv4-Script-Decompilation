@@ -162,10 +162,10 @@ event ObjectDraw
 		end if
 
 		// Draw RUNE
-		if sega.timer >= 120
-			if sega.timer < 150
+		if sega.timer >= 108
+			if sega.timer < 138
 				temp0 = sega.timer
-				temp0 -= 120
+				temp0 -= 108
 				temp0 *= 8
 				object.alpha = temp0
 			else
