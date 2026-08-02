@@ -40,9 +40,13 @@ event ObjectUpdate
 	case DEATHEVENT_GAMEOVER
 		if object.timer == 0
 			StopMusic()
-			SetMusicTrack("man.ogg", 0, false)
+			SetMusicTrack("man.ogg", 0, true) // loop the track!
 			PlayMusic(0)
 			object.timer = 1
+			object.visible = true // force visible to draw the tree
+			object[9].type = TypeName[Blank Object] // hide HUD
+			player[0].visible = false // hide player 1
+			player[1].visible = false // hide player 2
 		end if
 
 		// Wait for interaction button to exit
@@ -330,7 +334,7 @@ event ObjectDraw
 	case DEATHEVENT_GAMEOVER
 		// Draw Solid Black Background
 		DrawRect(0, 0, screen.xsize, screen.ysize, 0x00, 0x00, 0x00, 0xFF)
-		// Draw custom Man Tree Sprite
+		// Draw custom centered Man Tree Sprite
 		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
 		break
 
@@ -352,7 +356,7 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
 
 	LoadSpriteSheet("Man/Man.gif")
-	SpriteFrame(-64, -64, 128, 128, 0, 0) 	// 3 - Custom Man Tree Sprite
+	SpriteFrame(-105, -91, 210, 182, 149, 150) 	// 3 - Custom Centered Man Tree Sprite
 end event
 
 
