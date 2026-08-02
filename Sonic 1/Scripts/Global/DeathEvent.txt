@@ -38,31 +38,47 @@ private alias 4 : STAGE_P_CONTINUE
 event ObjectUpdate
 	switch object.state
 	case DEATHEVENT_GAMEOVER
-#platform: USE_ORIGINS
-		if game.playMode == BOOT_PLAYMODE_CLASSIC
-			CheckEqual(object.timeOver, false)
-			temp0 = checkResult
-			CheckEqual(stage.minutes, 9)
-			temp0 &= checkResult
-			CheckEqual(stage.seconds, 59)
-			temp0 &= checkResult
-			CheckEqual(stage.milliSeconds, 99)
-			temp0 &= checkResult
-			temp0 |= game.timeOver
-			
-			if temp0 != false
-				if player.continues == 0
-					object.timeOver = true
-				else
-					recMilliSeconds = 0
-					recSeconds = 0
-					recMinutes = 0
-					game.timeOver = false
-				end if
-			end if
+		if object.timer == 0
+			StopMusic()
+			SetMusicTrack("man.ogg", 0, false)
+			PlayMusic(0)
+			object.timer = 1
+		end if
+
+		// Wait for interaction button to exit
+		temp0 = false
+		if keyPress[0].buttonA == true
+			temp0 = true
+		end if
+		if keyPress[0].buttonB == true
+			temp0 = true
+		end if
+		if keyPress[0].buttonC == true
+			temp0 = true
+		end if
+		if keyPress[0].start == true
+			temp0 = true
+		end if
+#platform: MOBILE
+		CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+		if checkResult > -1
+			temp0 = true
 		end if
 #endplatform
-		// [Fall-through]
+
+		if temp0 == true
+			recStageList = stage.activeList
+			recStage = stage.listPos
+			stage.activeList = PRESENTATION_STAGE
+			stage.listPos = STAGE_P_TITLE
+#platform: USE_STANDALONE
+			engine.state = 8
+#endplatform
+			lampPostID = 0
+			LoadStage()
+		end if
+		break
+
 	case DEATHEVENT_TIMEOVER
 #platform: USE_ORIGINS
 		object.timeOver |= object.state
@@ -312,8 +328,10 @@ end event
 event ObjectDraw
 	switch object.state
 	case DEATHEVENT_GAMEOVER
-		DrawSpriteScreenXY(0, object.leftTextPos, 96)
-		DrawSpriteScreenXY(2, object.rightTextPos, 96)
+		// Draw Solid Black Background
+		DrawRect(0, 0, screen.xsize, screen.ysize, 0x00, 0x00, 0x00, 0xFF)
+		// Draw custom Man Tree Sprite
+		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
 		break
 
 	case DEATHEVENT_TIMEOVER
@@ -332,6 +350,9 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 1, 239) 		// 0 - "Game"
 	SpriteFrame(0, 0, 56, 16, 66, 239) 		// 1 - "Time"
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
+
+	LoadSpriteSheet("Man/Man.gif")
+	SpriteFrame(-64, -64, 128, 128, 0, 0) 	// 3 - Custom Man Tree Sprite
 end event
 
 
