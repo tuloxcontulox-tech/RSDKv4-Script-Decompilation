@@ -455,7 +455,7 @@ event ObjectStartup
 	SpriteFrame(-36, -76, 81, 88, 1, 90) 		// Sonic - Frame 8 		- #7
 	SpriteFrame(-36, -76, 81, 88, 83, 90) 		// Sonic - Frame 9 		- #8
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #9
-	SpriteFrame(-112, -17, 224, 34, 268, 462) 	// #10 (Deltarune Dark Logo)
+	SpriteFrame(-118, -17, 236, 34, 256, 462) 	// #10 (Deltarune Dark Logo)
 	SpriteFrame(-34, -6, 69, 13, 0, 499) 		// #11 (Dami_2o11 Credit)
 	SpriteFrame(-110, -35, 220, 70, 50, 303) 	// #12 (Strip 1)
 	SpriteFrame(-110, -35, 220, 70, 50, 374) 	// #13 (Strip 2)
@@ -508,7 +508,7 @@ end event
 event RSDKLoad
 	LoadSpriteSheet("Title/Title.gif")
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #0
-	SpriteFrame(-112, -17, 224, 34, 268, 462) 	// Logo (Bottom) / Dark Logo	- #1
+	SpriteFrame(-118, -17, 236, 34, 256, 462) 	// Logo (Bottom) / Dark Logo	- #1
 	
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

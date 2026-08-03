@@ -411,7 +411,7 @@ event ObjectStartup
 	SetMusicTrack("Invincibility.ogg", TRACK_INVINCIBLE, 39528)
 	SetMusicTrack("Continue.ogg", TRACK_CONTINUE, false)
 	SetMusicTrack("Boss.ogg", TRACK_BOSS, true)
-	SetMusicTrack("GameOver.ogg", TRACK_GAMEOVER, false)
+	SetMusicTrack("man.ogg", TRACK_GAMEOVER, true)
 	SetMusicTrack("Drowning.ogg", TRACK_DROWNING, false)
 
 	// Setup object range
