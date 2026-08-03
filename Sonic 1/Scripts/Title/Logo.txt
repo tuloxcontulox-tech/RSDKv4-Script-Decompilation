@@ -430,6 +430,11 @@ event ObjectDraw
 		DrawSpriteScreenXY(13, temp1, temp2)
 	end if
 
+	// Draw the Deltarune dark logo centered horizontally and vertically adjusted
+	temp1 = screen.ycenter
+	temp1 -= 40
+	DrawSpriteScreenXY(10, screen.xcenter, temp1)
+
 	// Copyright Sprite / Dami_2o11 Credit (moved to bottom-right corner)
 	temp0 = screen.xsize
 	temp0 -= 38
@@ -450,7 +455,7 @@ event ObjectStartup
 	SpriteFrame(-36, -76, 81, 88, 1, 90) 		// Sonic - Frame 8 		- #7
 	SpriteFrame(-36, -76, 81, 88, 83, 90) 		// Sonic - Frame 9 		- #8
 	SpriteFrame(-160, -119, 320, 238, 192, 2) 	// Logo (Top) / Big Image	- #9
-	SpriteFrame(-31, -17, 63, 34, 268, 462) 	// #10 (DEL)
+	SpriteFrame(-112, -17, 224, 34, 268, 462) 	// #10 (Deltarune Dark Logo)
 	SpriteFrame(-34, -6, 69, 13, 0, 499) 		// #11 (Dami_2o11 Credit)
 	SpriteFrame(-110, -35, 220, 70, 50, 303) 	// #12 (Strip 1)
 	SpriteFrame(-110, -35, 220, 70, 50, 374) 	// #13 (Strip 2)
