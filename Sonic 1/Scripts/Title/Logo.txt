@@ -430,10 +430,6 @@ event ObjectDraw
 		DrawSpriteScreenXY(13, temp1, temp2)
 	end if
 
-	// Draw the Deltarune dark logo centered horizontally and vertically adjusted
-	temp1 = screen.ycenter
-	temp1 -= 40
-	DrawSpriteScreenXY(10, screen.xcenter, temp1)
 
 	// Copyright Sprite / Dami_2o11 Credit (moved to bottom-right corner)
 	temp0 = screen.xsize

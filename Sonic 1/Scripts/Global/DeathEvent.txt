@@ -54,11 +54,11 @@ event ObjectUpdate
 			end if
 
 		// Overwrite the first few colors of the active palette as a safeguard for correct tree colors
-		SetPaletteEntry(0, 1, 0x291039)
-		SetPaletteEntry(0, 2, 0x941073)
-		SetPaletteEntry(0, 3, 0xE72942)
-		SetPaletteEntry(0, 4, 0x100021)
-		SetPaletteEntry(0, 5, 0xF8FCF8)
+		SetPaletteEntry(0, 1, 0x202040)
+		SetPaletteEntry(0, 2, 0x612C61)
+		SetPaletteEntry(0, 3, 0xA00080)
+		SetPaletteEntry(0, 4, 0xC00080)
+		SetPaletteEntry(0, 5, 0xE02040)
 
 		// Fade-in the black background and centered tree in half a second
 		if object.timer < 255
