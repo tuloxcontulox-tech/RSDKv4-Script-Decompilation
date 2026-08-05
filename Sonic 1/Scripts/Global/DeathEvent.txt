@@ -43,10 +43,10 @@ event ObjectUpdate
 			SetMusicTrack("man.ogg", 5, true) // Load man.ogg into track 5 with loop!
 			PlayMusic(5)
 			object.leftTextPos = 0
+			object.rightTextPos = 0 // Reset rightTextPos to 0 so the countdown does not run automatically!
 			object.timer = 0
 			object.visible = true // Force visible to draw the tree
 			object[9].type = TypeName[Blank Object] // Hide HUD completely
-			object[0].visible = false // Hide player 1
 			object[1].visible = false // Hide player 2
 
 			// Load custom palette once during initialization
