@@ -54,12 +54,14 @@ event ObjectUpdate
 			end if
 
 		// Overwrite the first few colors of the active palette as a safeguard for correct tree colors
-		SetPaletteEntry(0, 1, 0x0B0B32)
-		SetPaletteEntry(0, 2, 0x202040)
-		SetPaletteEntry(0, 3, 0x612C61)
-		SetPaletteEntry(0, 4, 0xA00080)
-		SetPaletteEntry(0, 5, 0xC00080)
-		SetPaletteEntry(0, 6, 0xE02040)
+		SetPaletteEntry(0, 128, 0x000000)
+		SetPaletteEntry(0, 129, 0x0B0B32)
+		SetPaletteEntry(0, 130, 0x202040)
+		SetPaletteEntry(0, 131, 0x612C61)
+		SetPaletteEntry(0, 132, 0xA00080)
+		SetPaletteEntry(0, 133, 0xC00080)
+		SetPaletteEntry(0, 134, 0xE02040)
+		SetPaletteEntry(0, 135, 0xFF8080)
 
 		// Fade-in the black background and centered tree in half a second
 		if object.timer < 255
@@ -91,15 +93,15 @@ event ObjectUpdate
 #endplatform
 
 		if temp0 == true
-			if object.leftTextPos == 0
+			if object.rightTextPos == 0
 				PlaySfx(SfxName[Weird], false)
-				object.leftTextPos = 30 // Wait 30 frames (0.5 seconds) for SFX to play
+				object.rightTextPos = 30 // Wait 30 frames (0.5 seconds) for SFX to play
 			end if
 		end if
 
-		if object.leftTextPos > 0
-			object.leftTextPos--
-			if object.leftTextPos == 0
+		if object.rightTextPos > 0
+			object.rightTextPos--
+			if object.rightTextPos == 0
 				recStageList = stage.activeList
 				recStage = stage.listPos
 				stage.activeList = PRESENTATION_STAGE
