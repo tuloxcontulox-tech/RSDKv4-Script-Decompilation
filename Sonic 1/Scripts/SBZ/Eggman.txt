@@ -53,7 +53,7 @@ private alias 2 : MUSICEVENT_TRANSITION
 // ========================
 
 event ObjectUpdate
-	if object.animation != SBZEGGMAN_ANI_LAUGH
+	if object.state != SBZEGGMAN_ANI_LAUGH
 		object.laughPlayed = false
 	end if
 	// Handle States
