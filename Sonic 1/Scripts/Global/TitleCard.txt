@@ -275,14 +275,14 @@ event ObjectDraw
 
 		// Draw Blue Circle
 		temp0 = screen.xcenter
-		temp0 -= 28
+		temp0 -= 88
 		temp0 += object.circlePos
 		temp0 += object.displayOffset
 		DrawSpriteScreenXY(26, temp0, 76)
 
 		// Draw Act Name
 		temp0 = screen.xcenter
-		temp0 += 22
+		temp0 += 42
 		temp0 += object.actNamePos
 		temp0 += object.displayOffset
 		DrawActName(0, temp0, 80, 0, 0, 16, 1)
