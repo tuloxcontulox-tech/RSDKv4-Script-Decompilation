@@ -618,12 +618,12 @@ event ObjectDraw
 	SetActivePalette(0, 0, screen.ysize)
 
 	temp0 = screen.xcenter
-	temp0 -= 54
+	temp0 += 70
 	temp0 += object.decorPos
 	DrawSpriteScreenXY(3, temp0, 56) // Blue Circle
 
 	temp0 = screen.xcenter
-	temp0 += 33
+	temp0 -= 37
 	temp0 += object.playerNamePos
 #platform: USE_STANDALONE
 	DrawSpriteScreenXY(stage.playerListPos, temp0, 60) // Player name
@@ -640,12 +640,12 @@ event ObjectDraw
 	DrawSpriteScreenXY(4, temp0, 60) // "Has"
 
 	temp0 = screen.xcenter
-	temp0 -= 48
+	temp0 -= 88
 	temp0 += object.passedPos
 	DrawSpriteScreenXY(5, temp0, 80) // "Passed"
 
 	temp0 = screen.xcenter
-	temp0 += 24
+	temp0 -= 16
 	temp0 += object.actPos
 	temp1 = stage.actNum
 	temp1 += 5
