@@ -84,8 +84,8 @@ event ObjectStartup
 		LoadSpriteSheet("GHZ/Objects.gif")
 		SpriteFrame(-8, -8, 16, 16, 160, 94)
 		SpriteFrame(-7, -7, 14, 14, 177, 94)
-		SpriteFrame(-6, -6, 12, 12, 160, 111)
-		SpriteFrame(-6, -6, 12, 12, 173, 111)
+		SpriteFrame(-10, -4, 20, 8, 144, 245)
+		SpriteFrame(-10, -4, 20, 8, 144, 245)
 	end if
 
 	CheckCurrentStageFolder("Zone02")
@@ -93,8 +93,8 @@ event ObjectStartup
 		LoadSpriteSheet("MZ/Objects.gif")
 		SpriteFrame(-8, -8, 16, 16, 1, 177)
 		SpriteFrame(-7, -7, 14, 14, 19, 178)
-		SpriteFrame(-6, -6, 12, 12, 37, 179)
-		SpriteFrame(-6, -6, 12, 12, 54, 179)
+		SpriteFrame(-10, -4, 20, 8, 88, 150)
+		SpriteFrame(-10, -4, 20, 8, 88, 150)
 	end if
 
 	CheckCurrentStageFolder("Zone03")
@@ -102,8 +102,8 @@ event ObjectStartup
 		LoadSpriteSheet("SYZ/Objects.gif")
 		SpriteFrame(-8, -8, 16, 16, 47, 81)
 		SpriteFrame(-7, -7, 14, 14, 65, 82)
-		SpriteFrame(-6, -6, 12, 12, 83, 83)
-		SpriteFrame(-6, -6, 12, 12, 100, 83)
+		SpriteFrame(-10, -4, 20, 8, 34, 156)
+		SpriteFrame(-10, -4, 20, 8, 34, 156)
 	end if
 
 	CheckCurrentStageFolder("Zone07")
@@ -134,14 +134,14 @@ event RSDKLoad
 	temp0 |= checkResult
 	if checkResult == true
 		LoadSpriteSheet("MZ/Objects.gif")
-		SpriteFrame(-6, -6, 12, 12, 37, 179)
+		SpriteFrame(-10, -4, 20, 8, 88, 150)
 	end if
 
 	CheckCurrentStageFolder("Zone03")
 	temp0 |= checkResult
 	if checkResult == true
 		LoadSpriteSheet("SYZ/Objects.gif")
-		SpriteFrame(-6, -6, 12, 12, 83, 83)
+		SpriteFrame(-10, -4, 20, 8, 34, 156)
 	end if
 
 	CheckCurrentStageFolder("Zone07")
@@ -154,7 +154,7 @@ event RSDKLoad
 	if temp0 == true
 		// We use GHZ's sprites as the fallback, "Zone01" (GHZ's folder) will come here too
 		LoadSpriteSheet("GHZ/Objects.gif")
-		SpriteFrame(-6, -6, 12, 12, 160, 111)
+		SpriteFrame(-10, -4, 20, 8, 144, 245)
 	end if
 	
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
