@@ -2,7 +2,7 @@
 // RSDK Project: Sonic 1
 // Script Description: Wrecking Ball Object
 // Script Author: Christian Whitehead/Simon Thomley
-// Unpacked by Rubberduckycooly's script unpacker
+// Unpacked by Rubberduckycooly\'s script unpacker
 // ----------------------------------
 
 // ========================
@@ -10,6 +10,8 @@
 // ========================
 
 private alias object.value0 : object.timer
+private alias object.value1 : object.spinAngle
+private alias object.value2 : object.prevRotation
 
 // States
 private alias 0 : WRECKINGBALL_INACTIVE
@@ -22,6 +24,34 @@ private alias 2 : WRECKINGBALL_EXPLODE
 // ========================
 
 event ObjectUpdate
+	if object.state == WRECKINGBALL_ACTIVE
+		// Animate face every 30 frames (half a second)
+		object.timer++
+		if object.timer >= 240
+			object.timer = 0
+		end if
+
+		// Calculate change in swing angle (object.rotation) to rotate the ball realistically
+		temp0 = object.rotation
+		temp0 -= object.prevRotation
+
+		// Handle wrap-around of object.rotation (which goes from 0 to 511)
+		if temp0 > 256
+			temp0 -= 512
+		else
+			if temp0 < -256
+				temp0 += 512
+			end if
+		end if
+
+		// Accumulate change into spin angle
+		object.spinAngle += temp0
+		object.spinAngle &= 511
+
+		// Store current rotation for next frame
+		object.prevRotation = object.rotation
+	end if
+
 	if object.state == WRECKINGBALL_EXPLODE
 		object.rotation *= 248
 		object.rotation >>= 8
@@ -57,8 +87,18 @@ end event
 
 
 event ObjectDraw
-	// Draw Wrecking ball smoothly rotated
-	DrawSpriteFX(1, FX_ROTATE, object.xpos, object.ypos)
+	// Calculate current animated face frame (1 to 8)
+	temp0 = object.timer
+	temp0 /= 30
+	temp0 %= 8
+	temp0++
+
+	// Draw the animated face smoothly rotated by our spinAngle
+	// We temporarily set object.rotation to spinAngle so DrawSpriteFX uses it!
+	temp1 = object.rotation
+	object.rotation = object.spinAngle
+	DrawSpriteFX(temp0, FX_ROTATE, object.xpos, object.ypos)
+	object.rotation = temp1 // Restore original swing angle for any other reference
 
 	// Draw Shine Overlay
 	object.inkEffect = INK_ADD
