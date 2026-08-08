@@ -75,9 +75,13 @@ event ObjectDraw
 
 	// Draw the animated face smoothly rotated based on the swing angle minus 128 (so it stays upright at the bottom)
 	temp1 = object.rotation
-	object.spinAngle = object.rotation
-	object.spinAngle -= 128
-	object.spinAngle &= 511
+	if object.state == WRECKINGBALL_ACTIVE
+		object.spinAngle = object.rotation
+		object.spinAngle -= 128
+		object.spinAngle &= 511
+	else
+		object.spinAngle = 0
+	end if
 	object.rotation = object.spinAngle
 	DrawSpriteFX(temp0, FX_ROTATE, object.xpos, object.ypos)
 	object.rotation = temp1 // Restore original swing angle for any other reference
