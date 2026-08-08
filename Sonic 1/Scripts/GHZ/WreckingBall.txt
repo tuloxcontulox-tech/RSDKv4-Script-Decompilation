@@ -57,13 +57,8 @@ end event
 
 
 event ObjectDraw
-	// Draw Wrecking ball
-	temp0 = object.rotation
-	temp0 += 8
-	temp0 >>= 4
-	temp0 &= 7
-	temp0++
-	DrawSprite(temp0)
+	// Draw Wrecking ball smoothly rotated
+	DrawSpriteFX(1, FX_ROTATE, object.xpos, object.ypos)
 
 	// Draw Shine Overlay
 	object.inkEffect = INK_ADD
