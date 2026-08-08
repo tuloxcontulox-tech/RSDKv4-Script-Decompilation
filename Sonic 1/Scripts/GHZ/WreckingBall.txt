@@ -10,8 +10,8 @@
 // ========================
 
 private alias object.value0 : object.timer
-private alias object.value1 : object.spinAngle
-private alias object.value2 : object.prevRotation
+private alias object.value10 : object.spinAngle
+private alias object.value11 : object.prevRotation
 
 // States
 private alias 0 : WRECKINGBALL_INACTIVE
@@ -90,7 +90,7 @@ event ObjectDraw
 	// Calculate current animated face frame (1 to 8)
 	temp0 = object.timer
 	temp0 /= 30
-	temp0 %= 8
+	temp0 %= 3
 	temp0++
 
 	// Draw the animated face smoothly rotated by our spinAngle
