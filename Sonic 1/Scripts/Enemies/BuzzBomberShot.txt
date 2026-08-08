@@ -39,6 +39,7 @@ event ObjectUpdate
 			object.timer = 0
 			object.state++
 			object.frame = 2
+			PlaySfx(SfxName[Bark], false)
 		end if
 		break
 
@@ -74,7 +75,11 @@ end event
 
 
 event ObjectDraw
-	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	if object.frame >= 2
+		DrawSprite(object.frame)
+	else
+		DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
+	end if
 end event
 
 
