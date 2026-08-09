@@ -447,18 +447,6 @@ event ObjectUpdate
 			PlaySfx(SfxName[Explosion], false)
 		end if
 	end if
-
-	// Boss Trail position tracker
-	object.value19++
-	if object.value19 >= 3
-		object.value19 = 0
-		object.value17 = object.value15
-		object.value18 = object.value16
-		object.value15 = object.value13
-		object.value16 = object.value14
-		object.value13 = object.xpos
-		object.value14 = object.ypos
-	end if
 end event
 
 
@@ -534,8 +522,6 @@ event ObjectDraw
 		
 	end switch
 
-	object.frame = temp0
-
 	switch object.flameAnim
 	default
 	case FLAME_INACTIVE
@@ -562,19 +548,6 @@ event ObjectDraw
 		break
 
 	end switch
-
-	if object.animation != LZEGGANI_INVISIBLE
-		if object.value17 != 0
-			object.inkEffect = INK_ALPHA
-			object.alpha = 120
-			DrawSpriteFX(object.frame, FX_FLIP, object.value13, object.value14)
-			object.alpha = 80
-			DrawSpriteFX(object.frame, FX_FLIP, object.value15, object.value16)
-			object.alpha = 40
-			DrawSpriteFX(object.frame, FX_FLIP, object.value17, object.value18)
-			object.inkEffect = INK_NONE
-			end if
-	end if
 end event
 
 

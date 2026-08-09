@@ -273,30 +273,30 @@ event ObjectDraw
 		SetActivePalette(0, 0, screen.ysize)
 		DrawRect(0, 0, screen.xsize, screen.ysize, 0, 0, 0, object.alpha)
 
-		// Draw Blue Circle
+		// Draw Blue Circle / Gaster (Ajustado para centrado global)
 		temp0 = screen.xcenter
-		temp0 += 56
+		temp0 -= 8
 		temp0 += object.circlePos
 		temp0 += object.displayOffset
 		DrawSpriteScreenXY(26, temp0, 76)
 
-		// Draw Act Name
+		// Draw Act Name (Movidito a la izquierda para centrar)
 		temp0 = screen.xcenter
-		temp0 -= 35
+		temp0 -= 6
 		temp0 += object.actNamePos
 		temp0 += object.displayOffset
 		DrawActName(0, temp0, 80, 0, 0, 16, 1)
 
-		// Draw Zone Text
+		// Draw Zone Text (Movidito a la izquierda para centrar)
 		temp0 = screen.xcenter
-		temp0 -= 110
+		temp0 -= 85
 		temp0 += object.zoneTextPos
 		temp0 += object.displayOffset
 		DrawSpriteScreenXY(27, temp0, 100)
 
-		// Draw Act Name
+		// Draw Act Number (Movidito a la izquierda para centrar)
 		temp0 = screen.xcenter
-		temp0 -= 40
+		temp0 -= 49
 		temp0 += object.actNumPos
 		temp0 += object.displayOffset
 
