@@ -92,18 +92,15 @@ end event
 
 
 event ObjectDraw
-	// If the boss was hit recently, use one of the laughing faces (frames 3 to 8).
-	// Otherwise, cycle through normal faces (frames 1 and 2).
+	// If the boss was hit recently, use one of the laughing/other faces (frames 2 to 8).
+	// Otherwise, keep the first/normal face static (frame 1).
 	if object.value9 > 0
 		temp0 = object.timer
 		temp0 /= 15 // Animate slightly faster when laughing!
-		temp0 %= 6
-		temp0 += 3
+		temp0 %= 7
+		temp0 += 2
 	else
-		temp0 = object.timer
-		temp0 /= 30
-		temp0 %= 2
-		temp0++
+		temp0 = 1
 	end if
 
 	temp1 = object.rotation
