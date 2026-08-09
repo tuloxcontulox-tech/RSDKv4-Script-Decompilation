@@ -13,6 +13,9 @@ private alias object.value0 : object.timer
 private alias object.value10 : object.spinAngle
 private alias object.value11 : object.prevRotation
 
+// Player Aliases
+private alias object.animation : player.animation
+
 // States
 private alias 0 : WRECKINGBALL_INACTIVE
 private alias 1 : WRECKINGBALL_ACTIVE
