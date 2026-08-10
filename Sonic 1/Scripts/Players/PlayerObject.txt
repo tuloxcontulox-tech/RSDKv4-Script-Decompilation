@@ -139,6 +139,7 @@ private alias 6 : TRACK_DROWNING
 
 // This isn't a global variable, so let's fake it here - it's an unused (and broken) animation, left over from Sonic Nexus
 private alias 34 : ANI_CORKSCREW_V
+private alias 35 : ANI_DROPDASH
 
 // Origins Stats Aliases
 private alias StageStatsUsabilityParam1 : stageStat.badnikDestroyCount
@@ -1100,6 +1101,8 @@ public function Player_CheckHit
 	temp0 = checkResult
 	CheckEqual(player[currentPlayer].animation, ANI_SPINDASH)
 	temp0 |= checkResult
+	CheckEqual(player[currentPlayer].animation, ANI_DROPDASH)
+	temp0 |= checkResult
 	CheckEqual(player[currentPlayer].animation, ANI_GLIDING)
 	temp0 |= checkResult
 	CheckEqual(player[currentPlayer].animation, ANI_GLIDING_STOP)
@@ -1173,6 +1176,8 @@ public function Player_BadnikBreak
 	CheckEqual(player[currentPlayer].animation, ANI_JUMPING)
 	temp0 = checkResult
 	CheckEqual(player[currentPlayer].animation, ANI_SPINDASH)
+	temp0 |= checkResult
+	CheckEqual(player[currentPlayer].animation, ANI_DROPDASH)
 	temp0 |= checkResult
 	CheckEqual(player[currentPlayer].animation, ANI_GLIDING)
 	temp0 |= checkResult
@@ -5749,21 +5754,7 @@ event ObjectUpdate
 
 		CallFunction(player.state)
 		
-#platform: USE_ORIGINS
-		// Set Sonic to always use the full ball sprite while drop dashing
-		CallFunction(Player_GetDropDashCharge)
-		if temp7 >= 20
-			if player.animation == ANI_JUMPING
-				if Player_superState == SUPERSTATE_SUPER
-					player.frame = 0
-				else
-					player.frame = 4
-				end if
-				player.animationTimer = 0
-				player.animationSpeed = 1
-			end if
-		end if
-#endplatform
+
 		
 		ProcessAnimation()
 
