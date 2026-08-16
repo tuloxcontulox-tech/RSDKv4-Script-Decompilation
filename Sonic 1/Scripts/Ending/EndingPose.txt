@@ -540,11 +540,6 @@ end event
 
 
 event ObjectDraw
-	if object.tailFrame != 0
-		// Tails should have one of his tails sprites in tow
-		DrawSprite(object.tailFrame)
-	end if
-	
 	// The main player sprite
 	DrawSpriteFX(object.frame, FX_FLIP, object.xpos, object.ypos)
 	
