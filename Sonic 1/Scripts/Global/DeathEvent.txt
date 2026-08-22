@@ -392,23 +392,23 @@ event ObjectStartup
 	LoadSpriteSheet("Man/Man.gif")
 	SpriteFrame(-102, -86, 204, 172, 0, 0) 		// 3 - Frame 0
 	SpriteFrame(-102, -86, 204, 172, 204, 0) 	// 4 - Frame 1
-	SpriteFrame(-102, -86, 204, 172, 408, 0) 	// 5 - Frame 2
-	SpriteFrame(-102, -86, 204, 172, 612, 0) 	// 6 - Frame 3
-	SpriteFrame(-102, -86, 204, 172, 816, 0) 	// 7 - Frame 4
+	SpriteFrame(-102, -86, 204, 172, 409, 0) 	// 5 - Frame 2
+	SpriteFrame(-102, -86, 204, 172, 614, 0) 	// 6 - Frame 3
+	SpriteFrame(-102, -86, 204, 172, 819, 0) 	// 7 - Frame 4
 	SpriteFrame(-102, -86, 204, 172, 0, 172) 	// 8 - Frame 5
 	SpriteFrame(-102, -86, 204, 172, 204, 172) 	// 9 - Frame 6
-	SpriteFrame(-102, -86, 204, 172, 408, 172) 	// 10 - Frame 7
-	SpriteFrame(-102, -86, 204, 172, 612, 172) 	// 11 - Frame 8
-	SpriteFrame(-102, -86, 204, 172, 816, 172) 	// 12 - Frame 9
+	SpriteFrame(-102, -86, 204, 172, 409, 172) 	// 10 - Frame 7
+	SpriteFrame(-102, -86, 204, 172, 614, 172) 	// 11 - Frame 8
+	SpriteFrame(-102, -86, 204, 172, 819, 172) 	// 12 - Frame 9
 	SpriteFrame(-102, -86, 204, 172, 0, 344) 	// 13 - Frame 10
 	SpriteFrame(-102, -86, 204, 172, 204, 344) 	// 14 - Frame 11
-	SpriteFrame(-102, -86, 204, 172, 408, 344) 	// 15 - Frame 12
-	SpriteFrame(-102, -86, 204, 172, 612, 344) 	// 16 - Frame 13
-	SpriteFrame(-102, -86, 204, 172, 816, 344) 	// 17 - Frame 14
+	SpriteFrame(-102, -86, 204, 172, 409, 344) 	// 15 - Frame 12
+	SpriteFrame(-102, -86, 204, 172, 614, 344) 	// 16 - Frame 13
+	SpriteFrame(-102, -86, 204, 172, 819, 344) 	// 17 - Frame 14
 	SpriteFrame(-102, -86, 204, 172, 0, 516) 	// 18 - Frame 15
 	SpriteFrame(-102, -86, 204, 172, 204, 516) 	// 19 - Frame 16
-	SpriteFrame(-102, -86, 204, 172, 408, 516) 	// 20 - Frame 17
-	SpriteFrame(-102, -86, 204, 172, 612, 516) 	// 21 - Frame 18
+	SpriteFrame(-102, -86, 204, 172, 409, 516) 	// 20 - Frame 17
+	SpriteFrame(-102, -86, 204, 172, 614, 516) 	// 21 - Frame 18
 end event
 
 
