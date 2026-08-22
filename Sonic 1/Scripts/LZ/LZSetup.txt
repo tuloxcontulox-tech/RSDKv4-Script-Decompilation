@@ -61,14 +61,14 @@ private alias 1 : MUSICEVENT_FLAG_SPEEDUP
 private alias 2 : MUSICEVENT_FLAG_SLOWDOWN
 
 // Music Loops
-private alias 84444 : MUSIC_LOOP_LZ
-private alias 67538 : MUSIC_LOOP_LZ_F
+private alias true : MUSIC_LOOP_LZ
+private alias true : MUSIC_LOOP_LZ_F
 
-private alias 1     : MUSIC_LOOP_SBZ
-private alias 1     : MUSIC_LOOP_SBZ_F
+private alias true : MUSIC_LOOP_SBZ
+private alias true : MUSIC_LOOP_SBZ_F
 
-private alias 39528 : MUSIC_LOOP_INV
-private alias 30436 : MUSIC_LOOP_INV_F
+private alias true : MUSIC_LOOP_INV
+private alias true : MUSIC_LOOP_INV_F
 
 
 // ========================

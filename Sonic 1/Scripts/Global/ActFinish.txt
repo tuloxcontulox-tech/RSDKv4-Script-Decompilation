@@ -575,7 +575,7 @@ event ObjectUpdate
 			loop
 
 			ResetObjectEntity(object.entityPos, TypeName[Blank Object], 0, 0, 0)
-			SetMusicTrack("Final.ogg", 0, 84680)
+			SetMusicTrack("Final.ogg", 0, true)
 			PlayMusic(0)
 		end if
 		break
