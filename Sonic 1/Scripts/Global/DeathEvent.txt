@@ -71,10 +71,10 @@ event ObjectUpdate
 			end if
 		end if
 
-		// Animate the tree parts every 0.5s (30 frames at 60 FPS) across an 8-step cycle
+		// Animate the tree parts every 0.25s (15 frames at 60 FPS) across an 8-step cycle
 		object.animationTimer++
 		temp0 = object.animationTimer
-		temp0 /= 30
+		temp0 /= 15
 		temp0 %= 8
 
 		// Purple Foliage offsets (value5 = X, value6 = Y): 2x UP, 2x LEFT, 2x DOWN, 2x RIGHT
