@@ -71,13 +71,83 @@ event ObjectUpdate
 			end if
 		end if
 
-		// Animate the tree across 19 frames (sprites 3 to 21)
+		// Animate the tree parts every 0.5s (30 frames at 60 FPS) across an 8-step cycle
 		object.animationTimer++
 		temp0 = object.animationTimer
-		temp0 /= 6
-		temp0 %= 19
-		object.frame = 3
-		object.frame += temp0
+		temp0 /= 30
+		temp0 %= 8
+
+		// Purple Foliage offsets (value5 = X, value6 = Y): 2x UP, 2x LEFT, 2x DOWN, 2x RIGHT
+		switch temp0
+		case 0
+			object.value5 = 0
+			object.value6 = -1
+			break
+		case 1
+			object.value5 = 0
+			object.value6 = -2
+			break
+		case 2
+			object.value5 = -1
+			object.value6 = -2
+			break
+		case 3
+			object.value5 = -2
+			object.value6 = -2
+			break
+		case 4
+			object.value5 = -2
+			object.value6 = -1
+			break
+		case 5
+			object.value5 = -2
+			object.value6 = 0
+			break
+		case 6
+			object.value5 = -1
+			object.value6 = 0
+			break
+		case 7
+			object.value5 = 0
+			object.value6 = 0
+			break
+		end switch
+
+		// Red Foliage offsets (value7 = X, value8 = Y): 2x DOWN, 2x RIGHT, 2x UP, 2x LEFT
+		switch temp0
+		case 0
+			object.value7 = 0
+			object.value8 = 1
+			break
+		case 1
+			object.value7 = 0
+			object.value8 = 2
+			break
+		case 2
+			object.value7 = 1
+			object.value8 = 2
+			break
+		case 3
+			object.value7 = 2
+			object.value8 = 2
+			break
+		case 4
+			object.value7 = 2
+			object.value8 = 1
+			break
+		case 5
+			object.value7 = 2
+			object.value8 = 0
+			break
+		case 6
+			object.value7 = 1
+			object.value8 = 0
+			break
+		case 7
+			object.value7 = 0
+			object.value8 = 0
+			break
+		end switch
 
 		// Wait for interaction button to exit
 		temp0 = false
@@ -366,10 +436,25 @@ event ObjectDraw
 		// Draw Solid Black Background with fade-in alpha
 		DrawRect(0, 0, screen.xsize, screen.ysize, 0x00, 0x00, 0x00, object.timer)
 
-		// Draw custom centered Man Tree Sprite with fade-in alpha
 		object.inkEffect = INK_ALPHA
 		object.alpha = object.timer
-		DrawSpriteScreenFX(object.frame, FX_INK, screen.xcenter, screen.ycenter)
+
+		// 1. Draw static Trunk (Sprite #3)
+		DrawSpriteScreenFX(3, FX_INK, screen.xcenter, screen.ycenter)
+
+		// 2. Draw moving Purple Foliage (Sprite #4)
+		temp1 = screen.xcenter
+		temp1 += object.value5
+		temp2 = screen.ycenter
+		temp2 += object.value6
+		DrawSpriteScreenFX(4, FX_INK, temp1, temp2)
+
+		// 3. Draw moving Red Foliage (Sprite #5)
+		temp1 = screen.xcenter
+		temp1 += object.value7
+		temp2 = screen.ycenter
+		temp2 += object.value8
+		DrawSpriteScreenFX(5, FX_INK, temp1, temp2)
 		break
 
 	case DEATHEVENT_TIMEOVER
@@ -390,25 +475,9 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
 
 	LoadSpriteSheet("Man/Man.gif")
-	SpriteFrame(-102, -86, 204, 172, 0, 0) 		// 3 - Frame 0
-	SpriteFrame(-102, -86, 204, 172, 204, 0) 	// 4 - Frame 1
-	SpriteFrame(-102, -86, 204, 172, 409, 0) 	// 5 - Frame 2
-	SpriteFrame(-102, -86, 204, 172, 614, 0) 	// 6 - Frame 3
-	SpriteFrame(-102, -86, 204, 172, 819, 0) 	// 7 - Frame 4
-	SpriteFrame(-102, -86, 204, 172, 0, 172) 	// 8 - Frame 5
-	SpriteFrame(-102, -86, 204, 172, 204, 172) 	// 9 - Frame 6
-	SpriteFrame(-102, -86, 204, 172, 409, 172) 	// 10 - Frame 7
-	SpriteFrame(-102, -86, 204, 172, 614, 172) 	// 11 - Frame 8
-	SpriteFrame(-102, -86, 204, 172, 819, 172) 	// 12 - Frame 9
-	SpriteFrame(-102, -86, 204, 172, 0, 344) 	// 13 - Frame 10
-	SpriteFrame(-102, -86, 204, 172, 204, 344) 	// 14 - Frame 11
-	SpriteFrame(-102, -86, 204, 172, 409, 344) 	// 15 - Frame 12
-	SpriteFrame(-102, -86, 204, 172, 614, 344) 	// 16 - Frame 13
-	SpriteFrame(-102, -86, 204, 172, 819, 344) 	// 17 - Frame 14
-	SpriteFrame(-102, -86, 204, 172, 0, 516) 	// 18 - Frame 15
-	SpriteFrame(-102, -86, 204, 172, 204, 516) 	// 19 - Frame 16
-	SpriteFrame(-102, -86, 204, 172, 409, 516) 	// 20 - Frame 17
-	SpriteFrame(-102, -86, 204, 172, 614, 516) 	// 21 - Frame 18
+	SpriteFrame(-151, -164, 256, 256, 0, 0) 		// 3 - Trunk (Quad 0)
+	SpriteFrame(-151, -164, 256, 256, 256, 0) 	// 4 - Purple Foliage (Quad 1)
+	SpriteFrame(-151, -164, 256, 256, 0, 256) 	// 5 - Red Foliage (Quad 2)
 end event
 
 
