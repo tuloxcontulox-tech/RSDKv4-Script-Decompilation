@@ -439,17 +439,17 @@ event ObjectDraw
 		object.inkEffect = INK_ALPHA
 		object.alpha = object.timer
 
-		// 1. Draw moving Purple Foliage (Sprite #4 - Background)
+		// 1. Draw static Trunk (Sprite #3 - Back layer)
+		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
+
+		// 2. Draw moving Purple Foliage (Sprite #4 - Middle layer)
 		temp1 = screen.xcenter
 		temp1 += object.value5
 		temp2 = screen.ycenter
 		temp2 += object.value6
 		DrawSpriteScreenXY(4, temp1, temp2)
 
-		// 2. Draw static Trunk (Sprite #3 - Middle)
-		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
-
-		// 3. Draw moving Red Foliage (Sprite #5 - Foreground)
+		// 3. Draw moving Red Foliage (Sprite #5 - Front layer)
 		temp1 = screen.xcenter
 		temp1 += object.value7
 		temp2 = screen.ycenter
@@ -475,9 +475,9 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
 
 	LoadSpriteSheet("Man/Man.gif")
-	SpriteFrame(-49, -47, 58, 44, 28, 48) 		// 3 - Trunk
-	SpriteFrame(-92, -65, 117, 47, 115, 16) 	// 4 - Purple Foliage
-	SpriteFrame(-105, -91, 82, 68, 236, 1) 		// 5 - Red Foliage
+	SpriteFrame(-25, 2, 58, 44, 28, 48) 		// 3 - Trunk
+	SpriteFrame(-43, -30, 87, 47, 115, 16) 		// 4 - Purple Foliage
+	SpriteFrame(-52, -45, 105, 68, 213, 1) 		// 5 - Red Foliage
 end event
 
 
