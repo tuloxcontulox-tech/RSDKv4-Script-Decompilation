@@ -439,17 +439,17 @@ event ObjectDraw
 		object.inkEffect = INK_ALPHA
 		object.alpha = object.timer
 
-		// 1. Draw static Trunk (Sprite #3)
-		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
-
-		// 2. Draw moving Purple Foliage (Sprite #4)
+		// 1. Draw moving Purple Foliage (Sprite #4 - Background)
 		temp1 = screen.xcenter
 		temp1 += object.value5
 		temp2 = screen.ycenter
 		temp2 += object.value6
 		DrawSpriteScreenXY(4, temp1, temp2)
 
-		// 3. Draw moving Red Foliage (Sprite #5)
+		// 2. Draw static Trunk (Sprite #3 - Middle)
+		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
+
+		// 3. Draw moving Red Foliage (Sprite #5 - Foreground)
 		temp1 = screen.xcenter
 		temp1 += object.value7
 		temp2 = screen.ycenter
