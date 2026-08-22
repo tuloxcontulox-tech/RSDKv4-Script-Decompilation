@@ -587,6 +587,7 @@ event ObjectDraw
 	switch object.animation
 	default
 	case GHZEGGANI_INVISIBLE
+		temp0 = -1
 		break
 
 	case GHZEGGANI_IDLE

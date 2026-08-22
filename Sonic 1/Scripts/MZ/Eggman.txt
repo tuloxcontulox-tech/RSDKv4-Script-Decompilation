@@ -503,6 +503,7 @@ event ObjectDraw
 	switch object.animation
 	default
 	case MZEGGANI_INVISIBLE
+		temp0 = -1
 		break
 
 	case MZEGGANI_IDLE

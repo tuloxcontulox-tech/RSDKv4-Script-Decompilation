@@ -587,13 +587,14 @@ event ObjectDraw
 			object.laughPlayed = false
 		end if
 	end if
-	temp0 = object.ypos
-	temp0 += object.stingerPos
-	DrawSpriteFX(19, FX_FLIP, object.xpos, temp0)
+	temp1 = object.ypos
+	temp1 += object.stingerPos
+	DrawSpriteFX(19, FX_FLIP, object.xpos, temp1)
 
 	switch object.animation
 	default
 	case SYZEGGANI_INVISIBLE
+		temp0 = -1
 		break
 
 	case SYZEGGANI_IDLE
