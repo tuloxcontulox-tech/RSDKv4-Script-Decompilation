@@ -15,6 +15,7 @@ private alias object.value11 : object.prevRotation
 
 // Player Aliases
 private alias object.animation : player.animation
+private alias 32 : ANI_HURT
 
 // States
 private alias 0 : WRECKINGBALL_INACTIVE

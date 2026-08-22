@@ -475,9 +475,9 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
 
 	LoadSpriteSheet("Man/Man.gif")
-	SpriteFrame(-49, 32, 114, 159, 56, 97) 		// 3 - Trunk (Quad 0)
-	SpriteFrame(-105, -91, 145, 95, 256, 30) 	// 4 - Purple Foliage (Quad 1)
-	SpriteFrame(-105, -91, 210, 65, 0, 256) 	// 5 - Red Foliage (Quad 2)
+	SpriteFrame(-49, -47, 58, 44, 28, 48) 		// 3 - Trunk
+	SpriteFrame(-92, -65, 117, 47, 115, 16) 	// 4 - Purple Foliage
+	SpriteFrame(-105, -91, 82, 68, 236, 1) 		// 5 - Red Foliage
 end event
 
 
