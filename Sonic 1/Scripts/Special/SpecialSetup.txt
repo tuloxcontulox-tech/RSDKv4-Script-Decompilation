@@ -703,7 +703,7 @@ end event
 
 
 event ObjectStartup
-	SetMusicTrack("Specialstage.ogg", TRACK_STAGE, true)
+	SetMusicTrack("Specialstage.ogg", TRACK_STAGE,  0)
 	SetMusicTrack("ActComplete.ogg", TRACK_ACTFINISH, false)
 
 	if options.gameMode == MODE_TIMEATTACK

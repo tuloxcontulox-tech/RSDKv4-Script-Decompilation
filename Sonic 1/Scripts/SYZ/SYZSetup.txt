@@ -32,11 +32,11 @@ private alias 1 : MUSICEVENT_FLAG_SPEEDUP
 private alias 2 : MUSICEVENT_FLAG_SLOWDOWN
 
 // Music Loops
-private alias true : MUSIC_LOOP_SYZ // This is 100712 on the level select...
-private alias true : MUSIC_LOOP_SYZ_F
+private alias 0 : MUSIC_LOOP_SYZ // This is 100712 on the level select...
+private alias 0 : MUSIC_LOOP_SYZ_F
 
-private alias true : MUSIC_LOOP_INV
-private alias true : MUSIC_LOOP_INV_F
+private alias 0 : MUSIC_LOOP_INV
+private alias 0 : MUSIC_LOOP_INV_F
 
 
 // ========================

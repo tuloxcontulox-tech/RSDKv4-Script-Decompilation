@@ -69,14 +69,14 @@ public alias 5 : PLAYER_AMY_A
 public alias 6 : PLAYER_AMY_TAILS_A
 
 // Music loops
-private alias true : MUSIC_LOOP_GHZ // 635970 in older S1 versions, changed some time around 1.0.7
-private alias true : MUSIC_LOOP_MZ
-private alias true : MUSIC_LOOP_SYZ // This is 101364 in the normal stage...
-private alias true : MUSIC_LOOP_LZ
-private alias true : MUSIC_LOOP_SLZ
-private alias true : MUSIC_LOOP_SBZ
-private alias true : MUSIC_LOOP_FINAL
-private alias true : MUSIC_LOOP_INV
+private alias 0 : MUSIC_LOOP_GHZ // 635970 in older S1 versions, changed some time around 1.0.7
+private alias 0 : MUSIC_LOOP_MZ
+private alias 0 : MUSIC_LOOP_SYZ // This is 101364 in the normal stage...
+private alias 0 : MUSIC_LOOP_LZ
+private alias 0 : MUSIC_LOOP_SLZ
+private alias 0 : MUSIC_LOOP_SBZ
+private alias 0 : MUSIC_LOOP_FINAL
+private alias 0 : MUSIC_LOOP_INV
 
 // Music Event Aliases
 private alias 25 : SLOT_MUSICEVENT_CHANGE
@@ -249,7 +249,7 @@ private function MenuControl_PlaySong
 			break
 
 		case 9
-			SetMusicTrack("SpecialStage.ogg", 0, true)
+			SetMusicTrack("SpecialStage.ogg", 0,  0)
 			PlayMusic(0)
 			break
 
@@ -264,7 +264,7 @@ private function MenuControl_PlaySong
 			break
 
 		case 12
-			SetMusicTrack("Boss.ogg", 0, true)
+			SetMusicTrack("Boss.ogg", 0,  0)
 			PlayMusic(0)
 			break
 
