@@ -71,6 +71,14 @@ event ObjectUpdate
 			end if
 		end if
 
+		// Animate the tree across 19 frames (sprites 3 to 21)
+		object.animationTimer++
+		temp0 = object.animationTimer
+		temp0 /= 6
+		temp0 %= 19
+		object.frame = 3
+		object.frame += temp0
+
 		// Wait for interaction button to exit
 		temp0 = false
 		if keyPress[0].buttonA == true
@@ -361,7 +369,7 @@ event ObjectDraw
 		// Draw custom centered Man Tree Sprite with fade-in alpha
 		object.inkEffect = INK_ALPHA
 		object.alpha = object.timer
-		DrawSpriteScreenFX(3, FX_INK, screen.xcenter, screen.ycenter)
+		DrawSpriteScreenFX(object.frame, FX_INK, screen.xcenter, screen.ycenter)
 		break
 
 	case DEATHEVENT_TIMEOVER
@@ -382,7 +390,25 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
 
 	LoadSpriteSheet("Man/Man.gif")
-	SpriteFrame(-105, -91, 210, 182, 149, 150) 	// 3 - Custom Centered Man Tree Sprite
+	SpriteFrame(-102, -86, 204, 172, 0, 0) 		// 3 - Frame 0
+	SpriteFrame(-102, -86, 204, 172, 204, 0) 	// 4 - Frame 1
+	SpriteFrame(-102, -86, 204, 172, 408, 0) 	// 5 - Frame 2
+	SpriteFrame(-102, -86, 204, 172, 612, 0) 	// 6 - Frame 3
+	SpriteFrame(-102, -86, 204, 172, 816, 0) 	// 7 - Frame 4
+	SpriteFrame(-102, -86, 204, 172, 0, 172) 	// 8 - Frame 5
+	SpriteFrame(-102, -86, 204, 172, 204, 172) 	// 9 - Frame 6
+	SpriteFrame(-102, -86, 204, 172, 408, 172) 	// 10 - Frame 7
+	SpriteFrame(-102, -86, 204, 172, 612, 172) 	// 11 - Frame 8
+	SpriteFrame(-102, -86, 204, 172, 816, 172) 	// 12 - Frame 9
+	SpriteFrame(-102, -86, 204, 172, 0, 344) 	// 13 - Frame 10
+	SpriteFrame(-102, -86, 204, 172, 204, 344) 	// 14 - Frame 11
+	SpriteFrame(-102, -86, 204, 172, 408, 344) 	// 15 - Frame 12
+	SpriteFrame(-102, -86, 204, 172, 612, 344) 	// 16 - Frame 13
+	SpriteFrame(-102, -86, 204, 172, 816, 344) 	// 17 - Frame 14
+	SpriteFrame(-102, -86, 204, 172, 0, 516) 	// 18 - Frame 15
+	SpriteFrame(-102, -86, 204, 172, 204, 516) 	// 19 - Frame 16
+	SpriteFrame(-102, -86, 204, 172, 408, 516) 	// 20 - Frame 17
+	SpriteFrame(-102, -86, 204, 172, 612, 516) 	// 21 - Frame 18
 end event
 
 

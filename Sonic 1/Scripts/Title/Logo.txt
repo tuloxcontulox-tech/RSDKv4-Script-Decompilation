@@ -409,6 +409,9 @@ event ObjectDraw
 	// Draw the big background image
 	DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
+	// Draw the Deltarune Dark Logo on top of the big background image
+	DrawSpriteScreenXY(10, screen.xcenter, screen.ycenter - 40)
+
 	// Animate bottom part of the background by cycling strip overlays (aligned perfectly)
 	temp0 = object.animationTimer
 	temp0 /= 10
