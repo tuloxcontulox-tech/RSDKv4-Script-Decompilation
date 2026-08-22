@@ -439,25 +439,22 @@ event ObjectDraw
 		object.inkEffect = INK_ALPHA
 		object.alpha = object.timer
 
-		temp3 = screen.ycenter
-		temp3 -= 50
-
 		// 1. Draw static Trunk (Sprite #3)
-		DrawSpriteScreenFX(3, FX_INK, screen.xcenter, temp3)
+		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
 
 		// 2. Draw moving Purple Foliage (Sprite #4)
 		temp1 = screen.xcenter
 		temp1 += object.value5
-		temp2 = temp3
+		temp2 = screen.ycenter
 		temp2 += object.value6
-		DrawSpriteScreenFX(4, FX_INK, temp1, temp2)
+		DrawSpriteScreenXY(4, temp1, temp2)
 
 		// 3. Draw moving Red Foliage (Sprite #5)
 		temp1 = screen.xcenter
 		temp1 += object.value7
-		temp2 = temp3
+		temp2 = screen.ycenter
 		temp2 += object.value8
-		DrawSpriteScreenFX(5, FX_INK, temp1, temp2)
+		DrawSpriteScreenXY(5, temp1, temp2)
 		break
 
 	case DEATHEVENT_TIMEOVER
@@ -478,9 +475,9 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
 
 	LoadSpriteSheet("Man/Man.gif")
-	SpriteFrame(-49, 32, 114, 159, 56, 97) 		// 3 - Trunk (Quad 0)
-	SpriteFrame(-105, -91, 145, 95, 256, 30) 	// 4 - Purple Foliage (Quad 1)
-	SpriteFrame(-105, -91, 210, 65, 0, 256) 	// 5 - Red Foliage (Quad 2)
+	SpriteFrame(-105, -91, 210, 182, 46, 74) 	// 3 - Trunk (Quad 0)
+	SpriteFrame(-105, -91, 210, 182, 302, 74) 	// 4 - Purple Foliage (Quad 1)
+	SpriteFrame(-105, -91, 210, 182, 46, 330) 	// 5 - Red Foliage (Quad 2)
 end event
 
 
