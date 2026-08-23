@@ -40,7 +40,7 @@ event ObjectUpdate
 	case DEATHEVENT_GAMEOVER
 		if object.leftTextPos != 0
 			StopMusic()
-			SetMusicTrack("man.ogg", 5,  0) // Load man.ogg into track 5 with loop!
+			SetMusicTrack("man.ogg", 5,      1) // Load man.ogg into track 5 with loop!
 			PlayMusic(5)
 			object.leftTextPos = 0
 			object.rightTextPos = 0 // Reset rightTextPos to 0 so the countdown does not run automatically!

@@ -494,7 +494,6 @@ end event
 
 
 event ObjectDraw
-	temp0 = true
 	if object.animation != MZEGGANI_LAUGH
 		if object.animation != MZEGGANI_LAUGH_LOOP
 			object.laughPlayed = false
