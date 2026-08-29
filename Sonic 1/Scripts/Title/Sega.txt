@@ -1,7 +1,7 @@
 // ----------------------------------
 // RSDK Project: Sonic 1
-// Script Description: Sega Object
-// Script Author: Christian Whitehead/Simon Thomley
+// Script Description: Sega Object (Custom Horror / EXE Intro Sequence)
+// Script Author: Christian Whitehead/Simon Thomley (Modified)
 // Unpacked by Rubberduckycooly's script unpacker
 // ----------------------------------
 
@@ -10,19 +10,23 @@
 // ========================
 
 private alias object.value0 : sega.timer
-// value1 isn't used
+private alias object.value1 : sega.sonicX
 private alias object.value2 : sega.peekPos
 private alias object.value3 : sega.levelSelectCheatPos
 private alias object.value4 : sega.touchDown
 private alias object.value5 : sega.regionSwitchCheatPos
+private alias object.value6 : sega.animFrame
+private alias object.value7 : sega.flashTimer
 
 // States
 private alias 0 : SEGA_SETUP
-private alias 1 : SEGA_FADEIN
-private alias 2 : SEGA_PEEKSEGA
-private alias 3 : SEGA_REVEALSEGA
-private alias 4 : SEGA_SEGASCREEN
-private alias 5 : SEGA_FADEOUT
+private alias 1 : SEGA_WALK_INTRO
+private alias 2 : SEGA_RUN_OUT
+private alias 3 : SEGA_3D_WAVE
+private alias 4 : SEGA_FLASH_HORROR
+private alias 5 : SEGA_RED_FLICKER
+private alias 6 : SEGA_LETRAS_DISPERSE
+private alias 7 : SEGA_FADEOUT
 
 // Priority
 public alias 0 : PRIORITY_BOUNDS
@@ -68,9 +72,6 @@ private function Sega_CheckTouchCheatCodes
 	end if
 
 	if sega.touchDown == false
-		// temp0 = touchX1
-		// temp1 = touchX2
-
 		temp0 = screen.xcenter
 		switch sega.levelSelectCheatPos
 		case 0
@@ -165,62 +166,90 @@ event ObjectUpdate
 		case SEGA_SETUP
 			object.alpha = 0x00
 			object.inkEffect = INK_ALPHA
-			sega.timer = 320
+			sega.timer = 120
+			sega.sonicX = -40
+			sega.animFrame = 0
 			SetScreenFade(0, 0, 0, sega.timer)
 			object.state++
 			break
 
-		case SEGA_FADEIN
+		case SEGA_WALK_INTRO
 			if sega.timer > 0
-				sega.timer -= 8
-			else
-				sega.peekPos = screen.xcenter
-				sega.peekPos -= 104
-				object.alpha = 0x80
-				object.state++
+				sega.timer -= 4
 			end if
-
 			SetScreenFade(0, 0, 0, sega.timer)
-			break
 
-		case SEGA_PEEKSEGA
-			temp0 = screen.xcenter
-			temp0 += 112
-			if sega.peekPos < temp0
-				sega.peekPos += 4
-			else
-				object.alpha = 0
-				object.state++
+			sega.sonicX += 2
+			sega.animFrame++
+			if sega.animFrame >= 24
+				sega.animFrame = 0
+			end if
+
+			if sega.sonicX >= screen.xcenter
+				sega.animFrame = 0
+				object.state = SEGA_RUN_OUT
 			end if
 			break
 
-		case SEGA_REVEALSEGA
-			if object.alpha < 0xD0
-				object.alpha += 8
-			else
-				object.alpha = 0xFF
-				object.state++
+		case SEGA_RUN_OUT
+			sega.sonicX += 6
+			sega.animFrame++
+			if sega.animFrame >= 16
+				sega.animFrame = 0
+			end if
+
+			temp0 = screen.xsize
+			temp0 += 40
+			if sega.sonicX > temp0
+				sega.timer = 0
+				sega.animFrame = 0
+				PlaySfx(SfxName[Sega Chant], false)
+				object.state = SEGA_3D_WAVE
+			end if
+			break
+
+		case SEGA_3D_WAVE
+			sega.timer++
+			sega.animFrame++
+			if sega.animFrame >= 20
+				sega.animFrame = 0
+			end if
+
+			if sega.timer == 120
+				sega.timer = 0
+				sega.flashTimer = 30
+				object.state = SEGA_FLASH_HORROR
 			end if
 #platform: USE_STANDALONE
 			CallFunction(Sega_CheckTouchCheatCodes)
 #endplatform
 			break
 
-		case SEGA_SEGASCREEN
+		case SEGA_FLASH_HORROR
+			if sega.flashTimer > 0
+				sega.flashTimer--
+			else
+				sega.timer = 0
+				object.state = SEGA_RED_FLICKER
+			end if
+			break
+
+		case SEGA_RED_FLICKER
 			sega.timer++
-			if sega.timer == 160
+			if sega.timer >= 120
+				sega.timer = 0
+				sega.animFrame = 0
+				object.state = SEGA_LETRAS_DISPERSE
+			end if
+			break
+
+		case SEGA_LETRAS_DISPERSE
+			sega.timer++
+			sega.animFrame++
+			if sega.timer >= 90
 				sega.timer = 0
 				object.state = SEGA_FADEOUT
 			end if
-
-			if sega.timer == 2
-				PlaySfx(SfxName[Sega Chant], false)
-			end if
-#platform: USE_STANDALONE
-			if options.gameMode == MODE_NOSAVE
-				CallFunction(Sega_CheckTouchCheatCodes)
-			end if
-#endplatform
 			break
 
 		case SEGA_FADEOUT
@@ -241,47 +270,111 @@ end event
 
 
 event ObjectDraw
-	// Draw White BG
-	DrawRect(0, 0, screen.xsize, screen.ysize, 0xE0, 0xE0, 0xE0, 0xFF)
+	switch object.state
+	case SEGA_SETUP
+	case SEGA_WALK_INTRO
+	case SEGA_RUN_OUT
+		// Custom Blue Background (RGB 19, 66, 148)
+		DrawRect(0, 0, screen.xsize, screen.ysize, 19, 66, 148, 0xFF)
 
-	// Draw Sega Sprite
-	if object.alpha > 8
-		DrawSpriteScreenFX(0, FX_INK, screen.xcenter, screen.ycenter)
-	end if
+		// Draw White Walking / Running Sonic
+		if object.state == SEGA_WALK_INTRO
+			temp0 = sega.animFrame
+			temp0 /= 6
+			temp0 += 2 // Walking frames (frames #2-#5)
+			DrawSpriteScreenXY(temp0, sega.sonicX, screen.ycenter)
+		else
+			temp0 = sega.animFrame
+			temp0 /= 4
+			temp0 += 6 // Running frames (frames #6-#9)
+			DrawSpriteScreenXY(temp0, sega.sonicX, screen.ycenter)
+		end if
+		break
 
-	// Draw the "reveal" rects
-	if object.state == SEGA_PEEKSEGA
-		temp0 = sega.peekPos
-		temp0 -= 10
-		temp0 -= screen.xsize
-		DrawRect(temp0, 91, screen.xsize, 58, 0xE0, 0xE0, 0xE0, 0xFF)
+	case SEGA_3D_WAVE
+		// Blue Background
+		DrawRect(0, 0, screen.xsize, screen.ysize, 19, 66, 148, 0xFF)
 
-		temp0 = sega.peekPos
-		temp0 -= 10
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xC0)
+		// 3D Wave Sega Logo
+		temp0 = sega.animFrame
+		temp0 /= 5
+		temp0 += 10 // 3D Wave SEGA Logo frames (#10-#13)
+		DrawSpriteScreenXY(temp0, screen.xcenter, screen.ycenter)
+		break
 
-		temp0 += 4
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xA0)
+	case SEGA_FLASH_HORROR
+		// White Flash
+		DrawRect(0, 0, screen.xsize, screen.ysize, 255, 255, 255, 0xFF)
+		break
 
-		temp0 += 8
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xA0)
+	case SEGA_RED_FLICKER
+		// Creepy Forest Background (Forest.gif - Frame #18)
+		DrawSpriteScreenXY(18, screen.xcenter, screen.ycenter)
 
-		temp0 += 4
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xC0)
+		// Red SEGA flickering (#14 / #15)
+		temp0 = sega.timer
+		temp0 &= 4
+		if temp0 == 0
+			DrawSpriteScreenXY(14, screen.xcenter, screen.ycenter)
+		else
+			DrawSpriteScreenXY(15, screen.xcenter, screen.ycenter)
+		end if
+		break
 
-		temp0 += 4
-		DrawRect(temp0, 91, screen.xsize, 58, 0xE0, 0xE0, 0xE0, 0xFF)
+	case SEGA_LETRAS_DISPERSE
+		// Creepy Forest Background (Forest.gif - Frame #18)
+		DrawSpriteScreenXY(18, screen.xcenter, screen.ycenter)
 
-		DrawSpriteScreenXY(1, screen.xcenter, screen.ycenter)
-	end if
+		// Outlined / Dispersing SEGA letters (#16 - together, #17 - separated/dispersing)
+		if sega.animFrame < 30
+			DrawSpriteScreenXY(16, screen.xcenter, screen.ycenter)
+		else
+			DrawSpriteScreenXY(17, screen.xcenter, screen.ycenter)
+		end if
+		break
+
+	case SEGA_FADEOUT
+		// Creepy Forest Background during smooth fadeout
+		DrawSpriteScreenXY(18, screen.xcenter, screen.ycenter)
+		DrawSpriteScreenXY(17, screen.xcenter, screen.ycenter)
+		break
+
+	end switch
 end event
 
 
 event ObjectStartup
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-93, -29, 188, 58, 323, 242)
-	SpriteFrame(-125, -29, 252, 58, 259, 301)
-	
+	SpriteFrame(-93, -29, 188, 58, 323, 242) 	// Original SEGA (#0)
+	SpriteFrame(-125, -29, 252, 58, 259, 301) 	// Reveal frame (#1)
+
+	// Custom White Sonic Sprites (Walking #2-#5, Running #6-#9)
+	SpriteFrame(-16, -20, 32, 40, 1, 1)
+	SpriteFrame(-16, -20, 32, 40, 34, 1)
+	SpriteFrame(-16, -20, 32, 40, 67, 1)
+	SpriteFrame(-16, -20, 32, 40, 100, 1)
+
+	SpriteFrame(-16, -20, 32, 40, 1, 42)
+	SpriteFrame(-16, -20, 32, 40, 34, 42)
+	SpriteFrame(-16, -20, 32, 40, 67, 42)
+	SpriteFrame(-16, -20, 32, 40, 100, 42)
+
+	// 3D SEGA Wave Intro Frames (#10-#13)
+	SpriteFrame(-93, -29, 188, 58, 1, 84)
+	SpriteFrame(-93, -29, 188, 58, 190, 84)
+	SpriteFrame(-93, -29, 188, 58, 1, 143)
+	SpriteFrame(-93, -29, 188, 58, 190, 143)
+
+	// SEGA Red & Horror Outlined Frames (#14-#17)
+	SpriteFrame(-93, -29, 188, 58, 1, 202)
+	SpriteFrame(-93, -29, 188, 58, 190, 202)
+	SpriteFrame(-93, -29, 188, 58, 1, 261) // Letras Juntas (#16)
+	SpriteFrame(-93, -29, 188, 58, 190, 261) // Letras Separadas 3D (#17)
+
+	// Creepy Forest Background Sheet (#18)
+	LoadSpriteSheet("Title/Forest.gif")
+	SpriteFrame(-256, -256, 512, 512, 0, 0)
+
 	// Hide touch controls
 	options.touchControls = false
 end event
