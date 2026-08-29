@@ -19,16 +19,15 @@ private alias object.value6 : sega.animFrame
 private alias object.value7 : sega.flashTimer
 private alias object.value8 : sega.scale
 private alias object.value9 : sega.rotation
+private alias object.value10 : sega.waveAngle
 
 // States
-private alias 0 : SEGA_SETUP
-private alias 1 : SEGA_WALK_INTRO
-private alias 2 : SEGA_RUN_OUT
-private alias 3 : SEGA_3D_WAVE
-private alias 4 : SEGA_FLASH_HORROR
-private alias 5 : SEGA_RED_FLICKER
-private alias 6 : SEGA_LETRAS_DISPERSE
-private alias 7 : SEGA_FADEOUT
+private alias 0 : SEGA_WALK_INTRO
+private alias 1 : SEGA_RUN_OUT
+private alias 2 : SEGA_3D_WAVE_ENTRY
+private alias 3 : SEGA_FLASH_FOREST
+private alias 4 : SEGA_RED_FLICKER_ZOOM
+private alias 5 : SEGA_END_INTRO
 
 // Priority
 public alias 0 : PRIORITY_BOUNDS
@@ -168,25 +167,24 @@ event ObjectUpdate
 #platform: USE_ORIGINS
 	if game.titleMode != 0
 		game.titleMode = 0
-		ResetObjectEntity(object.entityPos, TypeName[Logo], 0, 0, 0)
+		ResetObjectEntity(object.entityPos, TypeName[Sonic Team], 0, 0, 0)
 	else
 #endplatform
 		switch object.state
-		case SEGA_SETUP
-			object.alpha = 0x00
-			object.inkEffect = INK_ALPHA
-			sega.timer = 0
-			sega.sonicX = -20
-			sega.animFrame = 0
-			sega.scale = 512
-			sega.rotation = 180
-			PlaySfx(SfxName[Sega Chant], false)
-			SetScreenFade(0, 0, 0, 0)
-			object.state++
-			break
-
 		case SEGA_WALK_INTRO
-			// Walk for exactly 1.70s (102 frames at 60 FPS)
+			if sega.timer == 0
+				object.alpha = 0xFF
+				object.inkEffect = INK_NONE
+				sega.sonicX = -20
+				sega.animFrame = 0
+				sega.scale = 512
+				sega.rotation = 180
+				sega.waveAngle = 0
+				PlaySfx(SfxName[Sega Chant], false)
+				SetScreenFade(0, 0, 0, 0)
+			end if
+
+			// Walk for 1.70s (102 frames at 60 FPS)
 			sega.timer++
 			sega.sonicX += 1
 			sega.animFrame++
@@ -202,9 +200,9 @@ event ObjectUpdate
 			break
 
 		case SEGA_RUN_OUT
-			// Run for exactly 1.70s (102 frames at 60 FPS) and exit screen
+			// Run for 1.70s (102 frames at 60 FPS) and accelerate off screen
 			sega.timer++
-			sega.sonicX += 4
+			sega.sonicX += 5
 			sega.animFrame++
 			if sega.animFrame >= 16
 				sega.animFrame = 0
@@ -213,11 +211,12 @@ event ObjectUpdate
 			if sega.timer >= 102
 				sega.timer = 0
 				sega.animFrame = 0
-				object.state = SEGA_3D_WAVE
+				object.state = SEGA_3D_WAVE_ENTRY
 			end if
 			break
 
-		case SEGA_3D_WAVE
+		case SEGA_3D_WAVE_ENTRY
+			// 3D SEGA logo entrance: scale down from large to centered, rotate 180 -> 0, apply sine wave
 			sega.timer++
 			sega.animFrame++
 			if sega.animFrame >= 20
@@ -236,51 +235,52 @@ event ObjectUpdate
 				sega.rotation = 0
 			end if
 
+			sega.waveAngle += 8
+			sega.waveAngle &= 0xFF
+
 			if sega.timer >= 120
 				sega.timer = 0
-				sega.flashTimer = 15
-				object.state = SEGA_FLASH_HORROR
+				sega.flashTimer = 3
+				object.state = SEGA_FLASH_FOREST
 			end if
 #platform: USE_STANDALONE
 			CallFunction(Sega_CheckTouchCheatCodes)
 #endplatform
 			break
 
-		case SEGA_FLASH_HORROR
+		case SEGA_FLASH_FOREST
+			// Pure white flash for 3 frames
 			if sega.flashTimer > 0
 				sega.flashTimer--
 			else
 				sega.timer = 0
-				object.state = SEGA_RED_FLICKER
+				object.state = SEGA_RED_FLICKER_ZOOM
 			end if
 			break
 
-		case SEGA_RED_FLICKER
-			// Rapid flickering for red SEGA logo
+		case SEGA_RED_FLICKER_ZOOM
+			// Rapid flickering (1-2 frames), then separated letters spin and zoom in towards screen with fadeout
 			sega.timer++
-			if sega.timer >= 90
+			if sega.timer > 30
+				sega.scale += 12
+				sega.rotation += 16
+				if sega.timer < 120
+					temp0 = sega.timer
+					temp0 -= 30
+					temp0 *= 3
+					SetScreenFade(0, 0, 0, temp0)
+				end if
+			end if
+
+			if sega.timer >= 120
 				sega.timer = 0
-				sega.animFrame = 0
-				sega.scale = 256
-				sega.rotation = 0
-				object.state = SEGA_LETRAS_DISPERSE
+				object.state = SEGA_END_INTRO
 			end if
 			break
 
-		case SEGA_LETRAS_DISPERSE
-			// Separated letters spin and scale up towards screen
-			sega.timer++
-			sega.scale += 8
-			sega.rotation += 12
-			if sega.timer >= 90
-				sega.timer = 0
-				object.state = SEGA_FADEOUT
-			end if
-			break
-
-		case SEGA_FADEOUT
+		case SEGA_END_INTRO
 			if sega.timer < 256
-				sega.timer += 8
+				sega.timer += 16
 				SetScreenFade(0, 0, 0, sega.timer)
 			else
 				ResetObjectEntity(object.entityPos, TypeName[Sonic Team], 0, object.xpos, object.ypos)
@@ -297,74 +297,91 @@ end event
 
 event ObjectDraw
 	switch object.state
-	case SEGA_SETUP
 	case SEGA_WALK_INTRO
 	case SEGA_RUN_OUT
-		// Custom Blue Background (RGB 19, 66, 148) - 320x240 screen representation
+		// Custom Blue Background (RGB 19, 66, 148) for 320x240 screen
 		DrawRect(0, 0, screen.xsize, screen.ysize, 19, 66, 148, 0xFF)
 
 		// Draw White Walking / Running Sonic
 		if object.state == SEGA_WALK_INTRO
 			temp0 = sega.animFrame
 			temp0 /= 6
-			temp0 += 2 // Walking frames (frames #2-#5)
+			temp0 += 2 // Walking frames (#2-#5)
 			DrawSpriteScreenXY(temp0, sega.sonicX, 120)
 		else
 			temp0 = sega.animFrame
 			temp0 /= 4
-			temp0 += 6 // Running frames (frames #6-#9)
+			temp0 += 6 // Running frames (#6-#9)
 			DrawSpriteScreenXY(temp0, sega.sonicX, 120)
 		end if
 		break
 
-	case SEGA_3D_WAVE
+	case SEGA_3D_WAVE_ENTRY
 		// Blue Background
 		DrawRect(0, 0, screen.xsize, screen.ysize, 19, 66, 148, 0xFF)
 
-		// 3D Wave Sega Logo with rotation and scale
+		// Calculate sine wave displacement
+		Sin(temp1, sega.waveAngle)
+		temp1 >>= 5
+		temp1 += 120
+
+		// 3D Wave Sega Logo with rotation, scale, and sine wave offset
 		temp0 = sega.animFrame
 		temp0 /= 5
 		temp0 += 10 // 3D Wave SEGA Logo frames (#10-#13)
 		object.scale = sega.scale
 		object.rotation = sega.rotation
-		DrawSpriteFX(temp0, FX_ROTSCALE, screen.xcenter, 120)
+		DrawSpriteScreenFX(temp0, FX_ROTSCALE, screen.xcenter, temp1)
 		break
 
-	case SEGA_FLASH_HORROR
-		// White Flash
+	case SEGA_FLASH_FOREST
+		// Pure White Flash
 		DrawRect(0, 0, screen.xsize, screen.ysize, 255, 255, 255, 0xFF)
 		break
 
-	case SEGA_RED_FLICKER
-		// 320x240 Creepy Forest Background (Forest.gif - Frame #18)
-		DrawSpriteScreenXY(18, screen.xcenter, 120)
+	case SEGA_RED_FLICKER_ZOOM
+		// 320x240 Creepy Forest Background (Forest.gif - Frame #21)
+		DrawSpriteScreenXY(21, screen.xcenter, 120)
 
-		// Rapid red SEGA flickering (#14 / #15)
-		temp0 = sega.timer
-		temp0 &= 2
-		if temp0 == 0
-			DrawSpriteScreenXY(14, screen.xcenter, 120)
+		if sega.timer <= 30
+			// Rapid red SEGA logo flickering (#14 / #15)
+			temp0 = sega.timer
+			temp0 &= 2
+			if temp0 == 0
+				DrawSpriteScreenXY(14, screen.xcenter, 120)
+			else
+				DrawSpriteScreenXY(15, screen.xcenter, 120)
+			end if
 		else
-			DrawSpriteScreenXY(15, screen.xcenter, 120)
+			// Separated individual SEGA letters (S, E, G, A) spinning and zooming in towards camera
+			object.scale = sega.scale
+			object.rotation = sega.rotation
+
+			// Letter 'S' (#17)
+			temp0 = screen.xcenter
+			temp0 -= 48
+			DrawSpriteScreenFX(17, FX_ROTSCALE, temp0, 120)
+
+			// Letter 'E' (#18)
+			temp0 = screen.xcenter
+			temp0 -= 16
+			DrawSpriteScreenFX(18, FX_ROTSCALE, temp0, 120)
+
+			// Letter 'G' (#19)
+			temp0 = screen.xcenter
+			temp0 += 16
+			DrawSpriteScreenFX(19, FX_ROTSCALE, temp0, 120)
+
+			// Letter 'A' (#20)
+			temp0 = screen.xcenter
+			temp0 += 48
+			DrawSpriteScreenFX(20, FX_ROTSCALE, temp0, 120)
 		end if
 		break
 
-	case SEGA_LETRAS_DISPERSE
-		// 320x240 Creepy Forest Background (Forest.gif - Frame #18)
-		DrawSpriteScreenXY(18, screen.xcenter, 120)
-
-		// Separated letters spinning and scaling up towards screen
-		object.scale = sega.scale
-		object.rotation = sega.rotation
-		DrawSpriteFX(17, FX_ROTSCALE, screen.xcenter, 120)
-		break
-
-	case SEGA_FADEOUT
-		// Creepy Forest Background during smooth fadeout
-		DrawSpriteScreenXY(18, screen.xcenter, 120)
-		object.scale = sega.scale
-		object.rotation = sega.rotation
-		DrawSpriteFX(17, FX_ROTSCALE, screen.xcenter, 120)
+	case SEGA_END_INTRO
+		// Forest background during final dark fadeout
+		DrawSpriteScreenXY(21, screen.xcenter, 120)
 		break
 
 	end switch
@@ -393,13 +410,18 @@ event ObjectStartup
 	SpriteFrame(-93, -29, 188, 58, 1, 143)
 	SpriteFrame(-93, -29, 188, 58, 190, 143)
 
-	// SEGA Red & Horror Outlined Frames (#14-#17)
+	// SEGA Red & Horror Outlined Frames (#14-#16)
 	SpriteFrame(-93, -29, 188, 58, 1, 202)
 	SpriteFrame(-93, -29, 188, 58, 190, 202)
 	SpriteFrame(-93, -29, 188, 58, 1, 261) // Letras Juntas (#16)
-	SpriteFrame(-93, -29, 188, 58, 190, 261) // Letras Separadas 3D (#17)
 
-	// Creepy Forest Background Sheet 320x240 (#18)
+	// Individual Separated SEGA Letters S, E, G, A (#17-#20)
+	SpriteFrame(-23, -29, 46, 58, 190, 261) // Letter S
+	SpriteFrame(-23, -29, 46, 58, 237, 261) // Letter E
+	SpriteFrame(-23, -29, 46, 58, 284, 261) // Letter G
+	SpriteFrame(-23, -29, 46, 58, 331, 261) // Letter A
+
+	// Creepy Forest Background Sheet 320x240 (#21)
 	LoadSpriteSheet("Title/Forest.gif")
 	SpriteFrame(-160, -120, 320, 240, 0, 0)
 
