@@ -1,38 +1,35 @@
 // ----------------------------------
 // RSDK Project: Sonic 1
-// Script Description: Sega Object
-// Script Author: Christian Whitehead/Simon Thomley
-// Unpacked by Rubberduckycooly's script unpacker
+// Script Description: SEGA Intro Object
+// Script Author: RetroScript v4
 // ----------------------------------
 
 // ========================
 // Aliases
 // ========================
 
-private alias object.value0 : sega.timer
-// value1 isn't used
-private alias object.value2 : sega.peekPos
-private alias object.value3 : sega.levelSelectCheatPos
-private alias object.value4 : sega.touchDown
-private alias object.value5 : sega.regionSwitchCheatPos
+private alias object.value0  : object.timer
+private alias object.value1  : sonic.xpos
+private alias object.value2  : sonic.ypos
+private alias object.value3  : sonic.frame
+private alias object.value4  : sonic.animTimer
+private alias object.value5  : sonic.speed
+private alias object.value6  : sega.scale
+private alias object.value7  : sega.rotation
+private alias object.value8  : sega.waveTimer
+private alias object.value9  : flash.timer
+private alias object.value10 : blink.timer
+private alias object.value11 : fade.alpha
+private alias object.value12 : letter.scale
+private alias object.value13 : letter.rotation
 
 // States
-private alias 0 : SEGA_SETUP
-private alias 1 : SEGA_FADEIN
-private alias 2 : SEGA_PEEKSEGA
-private alias 3 : SEGA_REVEALSEGA
-private alias 4 : SEGA_SEGASCREEN
-private alias 5 : SEGA_FADEOUT
-
-// Priority
-public alias 0 : PRIORITY_BOUNDS
-public alias 1 : PRIORITY_ACTIVE
-public alias 2 : PRIORITY_ALWAYS
-public alias 3 : PRIORITY_XBOUNDS
-public alias 4 : PRIORITY_XBOUNDS_DESTROY
-public alias 5 : PRIORITY_INACTIVE
-public alias 6 : PRIORITY_BOUNDS_SMALL
-public alias 7 : PRIORITY_ACTIVE_SMALL
+private alias 0 : STATE_WALKING
+private alias 1 : STATE_RUNNING
+private alias 2 : STATE_SEGA_WHITE_ENTRANCE
+private alias 3 : STATE_FLASH_TRANSITION
+private alias 4 : STATE_LETTERS_ZOOM
+private alias 5 : STATE_END_INTRO
 
 // Ink Effects
 public alias 0 : INK_NONE
@@ -41,113 +38,17 @@ public alias 2 : INK_ALPHA
 public alias 3 : INK_ADD
 public alias 4 : INK_SUB
 
-// Flip Directions
-public alias 0 : FLIP_NONE
-public alias 1 : FLIP_X
-public alias 2 : FLIP_Y
-public alias 3 : FLIP_XY
+// FX Modes
+public alias 0 : FX_NONE
+public alias 1 : FX_FLIP
+public alias 2 : FX_ROTATE
+public alias 3 : FX_ROTOSCALE
+public alias 4 : FX_SCALE
 
-// Game Modes
-private alias 0 : MODE_NOSAVE
-
-
-// ========================
-// Function Declarations
-// ========================
-
-reserve function Sega_CheckTouchCheatCodes
-
-// ========================
-// Function Definitions
-// ========================
-
-private function Sega_CheckTouchCheatCodes
-	CheckTouchRect(0, 0, screen.xsize, screen.ysize)
-	if checkResult == -1
-		sega.touchDown = false
-	end if
-
-	if sega.touchDown == false
-		// temp0 = touchX1
-		// temp1 = touchX2
-
-		temp0 = screen.xcenter
-		switch sega.levelSelectCheatPos
-		case 0
-			temp0 -= 93
-			temp1 = temp0
-			temp1 += 39
-			break
-			
-		case 1
-			temp0 -= 50
-			temp1 = temp0
-			temp1 += 42
-			break
-
-		case 2
-			temp0 -= 6
-			temp1 = temp0
-			temp1 += 42
-			break
-
-		case 3
-			temp0 += 36
-			temp1 = temp0
-			temp1 += 58
-			break
-
-		end switch
-
-		CheckTouchRect(temp0, 90, temp1, 150)
-		if checkResult > -1
-			sega.touchDown = true
-			sega.levelSelectCheatPos++
-			if sega.levelSelectCheatPos == 4
-				PlaySfx(SfxName[Ring L], false)
-				options.stageSelectFlag = true
-			end if
-		end if
-
-		temp0 = screen.xcenter
-		switch sega.regionSwitchCheatPos
-		case 0
-			temp0 += 36
-			temp1 = temp0
-			temp1 += 58
-			break
-
-		case 1
-			temp0 -= 6
-			temp1 = temp0
-			temp1 += 42
-			break
-
-		case 2
-			temp0 -= 50
-			temp1 = temp0
-			temp1 += 42
-			break
-
-		case 3
-			temp0 -= 93
-			temp1 = temp0
-			temp1 += 39
-			break
-
-		end switch
-
-		CheckTouchRect(temp0, 90, temp1, 150)
-		if checkResult > -1
-			sega.touchDown = true
-			sega.regionSwitchCheatPos++
-			if sega.regionSwitchCheatPos == 4
-				PlaySfx(SfxName[Ring L], false)
-				options.region ^= true
-			end if
-		end if
-	end if
-end function
+// Priority
+public alias 0 : PRIORITY_BOUNDS
+public alias 1 : PRIORITY_ACTIVE
+public alias 2 : PRIORITY_ALWAYS
 
 
 // ========================
@@ -155,135 +56,250 @@ end function
 // ========================
 
 event ObjectUpdate
-#platform: USE_ORIGINS
-	if game.titleMode != 0
-		game.titleMode = 0
-		ResetObjectEntity(object.entityPos, TypeName[Logo], 0, 0, 0)
-	else
-#endplatform
-		switch object.state
-		case SEGA_SETUP
-			object.alpha = 0x00
-			object.inkEffect = INK_ALPHA
-			sega.timer = 320
-			SetScreenFade(0, 0, 0, sega.timer)
-			object.state++
-			break
+	switch object.state
+	case STATE_WALKING
+		if object.timer == 0
+			PlaySfx(SfxName[Sega], false)
+			sonic.xpos = -30
+			sonic.ypos = screen.ycenter
+			sonic.ypos += 20
+			sonic.frame = 0
+			sonic.animTimer = 0
+			sonic.speed = 2
+		end if
 
-		case SEGA_FADEIN
-			if sega.timer > 0
-				sega.timer -= 8
-			else
-				sega.peekPos = screen.xcenter
-				sega.peekPos -= 104
-				object.alpha = 0x80
-				object.state++
-			end if
+		sonic.xpos += sonic.speed
 
-			SetScreenFade(0, 0, 0, sega.timer)
-			break
+		sonic.animTimer++
+		if sonic.animTimer >= 8
+			sonic.animTimer = 0
+			sonic.frame++
+			if sonic.frame >= 6
+				sonic.frame = 0
+			end if
+		end if
 
-		case SEGA_PEEKSEGA
-			temp0 = screen.xcenter
-			temp0 += 112
-			if sega.peekPos < temp0
-				sega.peekPos += 4
-			else
-				object.alpha = 0
-				object.state++
-			end if
-			break
+		object.timer++
+		if object.timer >= 102
+			object.timer = 0
+			sonic.frame = 6
+			sonic.animTimer = 0
+			sonic.speed = 5
+			object.state = STATE_RUNNING
+		end if
+		break
 
-		case SEGA_REVEALSEGA
-			if object.alpha < 0xD0
-				object.alpha += 8
-			else
-				object.alpha = 0xFF
-				object.state++
-			end if
-#platform: USE_STANDALONE
-			CallFunction(Sega_CheckTouchCheatCodes)
-#endplatform
-			break
+	case STATE_RUNNING
+		sonic.xpos += sonic.speed
 
-		case SEGA_SEGASCREEN
-			sega.timer++
-			if sega.timer == 160
-				sega.timer = 0
-				object.state = SEGA_FADEOUT
+		sonic.animTimer++
+		if sonic.animTimer >= 4
+			sonic.animTimer = 0
+			sonic.frame++
+			if sonic.frame >= 8
+				sonic.frame = 6
 			end if
+		end if
 
-			if sega.timer == 2
-				PlaySfx(SfxName[Sega Chant], false)
-			end if
-#platform: USE_STANDALONE
-			if options.gameMode == MODE_NOSAVE
-				CallFunction(Sega_CheckTouchCheatCodes)
-			end if
-#endplatform
-			break
+		object.timer++
+		if object.timer >= 102
+			object.timer = 0
+			sega.scale = 0x400
+			sega.rotation = 256
+			sega.waveTimer = 0
+			object.state = STATE_SEGA_WHITE_ENTRANCE
+		end if
+		break
 
-		case SEGA_FADEOUT
-			if sega.timer < 256
-				sega.timer += 8
-				SetScreenFade(0, 0, 0, sega.timer)
-			else
-				ResetObjectEntity(object.entityPos, TypeName[Sonic Team], 0, object.xpos, object.ypos)
-				SetScreenFade(0, 0, 0, 0xFF)
+	case STATE_SEGA_WHITE_ENTRANCE
+		object.timer++
+		sega.waveTimer += 8
+
+		if sega.scale > 0x200
+			sega.scale -= 8
+		else
+			sega.scale = 0x200
+		end if
+
+		if sega.rotation > 0
+			sega.rotation -= 4
+		else
+			sega.rotation = 0
+		end if
+
+		if object.timer >= 120
+			object.timer = 0
+			flash.timer = 0
+			object.state = STATE_FLASH_TRANSITION
+		end if
+		break
+
+	case STATE_FLASH_TRANSITION
+		flash.timer++
+		if flash.timer >= 3
+			object.timer = 0
+			blink.timer = 0
+			fade.alpha = 0
+			letter.scale = 0x200
+			letter.rotation = 0
+			object.state = STATE_LETTERS_ZOOM
+		end if
+		break
+
+	case STATE_LETTERS_ZOOM
+		object.timer++
+		blink.timer++
+
+		if object.timer > 10
+			letter.scale += 0x20
+			letter.rotation += 8
+
+			if fade.alpha < 255
+				fade.alpha += 4
+				if fade.alpha > 255
+					fade.alpha = 255
+				end if
 			end if
-			break
-			
-		end switch
-#platform: USE_ORIGINS
-	end if // game.titleMode == 0 check from way up above
-#endplatform
+		end if
+
+		if object.timer >= 90
+			object.state = STATE_END_INTRO
+		end if
+		break
+
+	case STATE_END_INTRO
+		SetScreenFade(0, 0, 0, 255)
+		ResetObjectEntity(object.entityPos, TypeName[Logo], 0, object.xpos, object.ypos)
+		break
+
+	end switch
 end event
 
 
 event ObjectDraw
-	// Draw White BG
-	DrawRect(0, 0, screen.xsize, screen.ysize, 0xE0, 0xE0, 0xE0, 0xFF)
+	switch object.state
+	case STATE_WALKING
+	case STATE_RUNNING
+		// Draw Solid Blue Background (RGB: 19, 66, 148)
+		DrawRect(0, 0, screen.xsize, screen.ysize, 19, 66, 148, 255)
 
-	// Draw Sega Sprite
-	if object.alpha > 8
-		DrawSpriteScreenFX(0, FX_INK, screen.xcenter, screen.ycenter)
-	end if
+		// Draw Sonic
+		DrawSpriteScreenXY(sonic.frame, sonic.xpos, sonic.ypos)
+		break
 
-	// Draw the "reveal" rects
-	if object.state == SEGA_PEEKSEGA
-		temp0 = sega.peekPos
-		temp0 -= 10
-		temp0 -= screen.xsize
-		DrawRect(temp0, 91, screen.xsize, 58, 0xE0, 0xE0, 0xE0, 0xFF)
+	case STATE_SEGA_WHITE_ENTRANCE
+		// Draw Solid Blue Background
+		DrawRect(0, 0, screen.xsize, screen.ysize, 19, 66, 148, 255)
 
-		temp0 = sega.peekPos
-		temp0 -= 10
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xC0)
+		// Draw 3D White SEGA Intro Logo with wave & scale/rotation FX
+		object.scale = sega.scale
+		object.rotation = sega.rotation
+		object.inkEffect = INK_NONE
 
-		temp0 += 4
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xA0)
+		// Apply wave offset calculation
+		Cos(temp0, sega.waveTimer)
+		temp0 >>= 5
+		temp1 = screen.ycenter
+		temp1 += temp0
 
-		temp0 += 8
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xA0)
+		if object.rotation != 0
+			DrawSpriteScreenFX(8, FX_ROTOSCALE, screen.xcenter, temp1)
+		else
+			DrawSpriteScreenFX(8, FX_SCALE, screen.xcenter, temp1)
+		end if
+		break
 
-		temp0 += 4
-		DrawRect(temp0, 91, 4, 58, 0xE0, 0xE0, 0xE0, 0xC0)
+	case STATE_FLASH_TRANSITION
+		// Render Forest Background (Frame 14)
+		DrawSpriteScreenXY(14, screen.xcenter, screen.ycenter)
 
-		temp0 += 4
-		DrawRect(temp0, 91, screen.xsize, 58, 0xE0, 0xE0, 0xE0, 0xFF)
+		// Render SEGA ROJO Logo (Frame 9)
+		DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
 
-		DrawSpriteScreenXY(1, screen.xcenter, screen.ycenter)
-	end if
+		// Draw Pure White Flash (RGB: 255, 255, 255) for 2-3 frames
+		DrawRect(0, 0, screen.xsize, screen.ysize, 255, 255, 255, 255)
+		break
+
+	case STATE_LETTERS_ZOOM
+		// Render Forest Background
+		DrawSpriteScreenXY(14, screen.xcenter, screen.ycenter)
+
+		temp0 = blink.timer
+		temp0 &= 2
+		if temp0 == 0
+			// Draw SEGA ROJO Logo during initial rapid blink
+			DrawSpriteScreenXY(9, screen.xcenter, screen.ycenter)
+		else
+			// Draw Separated SEGA 3D Letters (S, E, G, A) with independent scale and rotation
+			object.scale = letter.scale
+			object.rotation = letter.rotation
+			object.inkEffect = INK_NONE
+
+			// Letter 'S' (Frame 10)
+			temp2 = screen.xcenter
+			temp2 -= 60
+			DrawSpriteScreenFX(10, FX_ROTOSCALE, temp2, screen.ycenter)
+
+			// Letter 'E' (Frame 11)
+			temp2 = screen.xcenter
+			temp2 -= 20
+			DrawSpriteScreenFX(11, FX_ROTOSCALE, temp2, screen.ycenter)
+
+			// Letter 'G' (Frame 12)
+			temp2 = screen.xcenter
+			temp2 += 20
+			DrawSpriteScreenFX(12, FX_ROTOSCALE, temp2, screen.ycenter)
+
+			// Letter 'A' (Frame 13)
+			temp2 = screen.xcenter
+			temp2 += 60
+			DrawSpriteScreenFX(13, FX_ROTOSCALE, temp2, screen.ycenter)
+		end if
+
+		// Apply Fade Out darkening screen overlay
+		if fade.alpha > 0
+			DrawRect(0, 0, screen.xsize, screen.ysize, 0, 0, 0, fade.alpha)
+		end if
+		break
+
+	case STATE_END_INTRO
+		DrawRect(0, 0, screen.xsize, screen.ysize, 0, 0, 0, 255)
+		break
+
+	end switch
 end event
 
 
 event ObjectStartup
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-93, -29, 188, 58, 323, 242)
-	SpriteFrame(-125, -29, 252, 58, 259, 301)
-	
-	// Hide touch controls
-	options.touchControls = false
+
+	// Sonic Walking frames (#0 - #5)
+	SpriteFrame(-12, -20, 24, 39, 0, 228)
+	SpriteFrame(-18, -20, 37, 39, 24, 228)
+	SpriteFrame(-15, -20, 30, 39, 61, 228)
+	SpriteFrame(-14, -20, 28, 39, 91, 228)
+	SpriteFrame(-19, -20, 38, 39, 119, 228)
+	SpriteFrame(-16, -20, 33, 39, 157, 228)
+
+	// Sonic Running frames (#6 - #7)
+	SpriteFrame(-15, -15, 31, 31, 0, 278)
+	SpriteFrame(-16, -15, 32, 31, 31, 278)
+
+	// 3D SEGA INTRO Logo White (#8)
+	SpriteFrame(-94, -30, 189, 60, 0, 319)
+
+	// SEGA ROJO Logo (#9)
+	SpriteFrame(-94, -30, 189, 60, 319, 250)
+
+	// LETRAS SEGA SEPARADAS 3D (#10 - #13)
+	SpriteFrame(-21, -30, 43, 60, 1, 451)  // S
+	SpriteFrame(-22, -30, 44, 60, 47, 451) // E
+	SpriteFrame(-22, -30, 44, 60, 94, 451) // G
+	SpriteFrame(-29, -30, 58, 60, 141, 451)// A
+
+	// Forest Background (#14)
+	LoadSpriteSheet("Title/Forest.gif")
+	SpriteFrame(-160, -120, 320, 240, 0, 0)
 end event
 
 
@@ -292,13 +308,12 @@ end event
 // ========================
 
 event RSDKDraw
-	DrawSprite(0)
+	DrawSprite(8)
 end event
 
 
 event RSDKLoad
 	LoadSpriteSheet("Title/Title.gif")
-	SpriteFrame(-93, -29, 188, 58, 323, 242)
-	
+	SpriteFrame(-94, -30, 189, 60, 0, 319)
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event
