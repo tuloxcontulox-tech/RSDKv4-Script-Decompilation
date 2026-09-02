@@ -11,6 +11,7 @@
 // Aliases
 // ========================
 
+private alias object.value20 : object.laughPlayed
 private alias object.value0  : object.originPos.x
 private alias object.value1  : object.originPos.y
 private alias object.value2  : object.defeated
@@ -450,6 +451,9 @@ end event
 
 
 event ObjectDraw
+	if object.animation != LZEGGANI_LAUGH
+		object.laughPlayed = false
+	end if
 	switch object.animation
 	default
 	case LZEGGANI_INVISIBLE
@@ -464,6 +468,10 @@ event ObjectDraw
 		break
 
 	case LZEGGANI_LAUGH
+		if object.laughPlayed == false
+			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
+		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
 		temp0 /= 5

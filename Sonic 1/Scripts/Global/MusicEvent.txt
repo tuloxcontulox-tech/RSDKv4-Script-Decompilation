@@ -80,7 +80,7 @@ event ObjectUpdate
 		break
 
 	case MUSICEVENT_TRANSITION
-		if object.timer < 240
+		if object.timer < 180
 			if music.volume > 0
 				PauseMusic()
 				music.volume = 0

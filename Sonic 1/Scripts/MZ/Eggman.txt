@@ -11,6 +11,7 @@
 // Aliases
 // ========================
 
+private alias object.value20 : object.laughPlayed
 private alias object.value0  : object.timer
 private alias object.value1  : object.health
 private alias object.value2  : object.invincibilityTimer
@@ -477,13 +478,31 @@ event ObjectUpdate
 			end if
 		next
 	end if
+
+	// Boss Trail position tracker
+	object.value19++
+	if object.value19 >= 3
+		object.value19 = 0
+		object.value17 = object.value15
+		object.value18 = object.value16
+		object.value15 = object.value13
+		object.value16 = object.value14
+		object.value13 = object.xpos
+		object.value14 = object.ypos
+	end if
 end event
 
 
 event ObjectDraw
+	if object.animation != MZEGGANI_LAUGH
+		if object.animation != MZEGGANI_LAUGH_LOOP
+			object.laughPlayed = false
+		end if
+	end if
 	switch object.animation
 	default
 	case MZEGGANI_INVISIBLE
+		temp0 = -1
 		break
 
 	case MZEGGANI_IDLE
@@ -495,6 +514,10 @@ event ObjectDraw
 		break
 
 	case MZEGGANI_LAUGH
+		if object.laughPlayed == false
+			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
+		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
 		temp0 /= 5
@@ -510,6 +533,10 @@ event ObjectDraw
 		break
 
 	case MZEGGANI_LAUGH_LOOP
+		if object.laughPlayed == false
+			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
+		end if
 		temp0 = object.animationTimer
 		temp0 /= 5
 		temp0 += 9
@@ -554,6 +581,8 @@ event ObjectDraw
 		
 	end switch
 
+	object.frame = temp0
+
 	switch object.flameAnim
 	default
 	case FLAME_INACTIVE
@@ -582,6 +611,19 @@ event ObjectDraw
 	end switch
 
 	DrawSpriteFX(19, FX_FLIP, object.xpos, object.ypos)
+
+	if object.animation != MZEGGANI_INVISIBLE
+		if object.value17 != 0
+			object.inkEffect = INK_ALPHA
+			object.alpha = 120
+			DrawSpriteFX(object.frame, FX_FLIP, object.value13, object.value14)
+			object.alpha = 80
+			DrawSpriteFX(object.frame, FX_FLIP, object.value15, object.value16)
+			object.alpha = 40
+			DrawSpriteFX(object.frame, FX_FLIP, object.value17, object.value18)
+			object.inkEffect = INK_NONE
+			end if
+	end if
 end event
 
 

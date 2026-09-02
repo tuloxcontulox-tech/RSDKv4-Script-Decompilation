@@ -11,6 +11,8 @@
 // Aliases
 // ========================
 
+private alias object.value20 : object.laughPlayed
+
 private alias object.value0 : object.timer
 private alias object.value1 : object.health
 private alias object.value2 : object.arenaBorder
@@ -563,13 +565,29 @@ event ObjectUpdate
 			end if
 		end if
 	next
+
+	// Boss Trail position tracker
+	object.value19++
+	if object.value19 >= 3
+		object.value19 = 0
+		object.value17 = object.value15
+		object.value18 = object.value16
+		object.value15 = object.value13
+		object.value16 = object.value14
+		object.value13 = object.xpos
+		object.value14 = object.ypos
+	end if
 end event
 
 
 event ObjectDraw
+	if object.animation != GHZEGGANI_LAUGH
+		object.laughPlayed = false
+	end if
 	switch object.animation
 	default
 	case GHZEGGANI_INVISIBLE
+		temp0 = -1
 		break
 
 	case GHZEGGANI_IDLE
@@ -581,6 +599,10 @@ event ObjectDraw
 		break
 
 	case GHZEGGANI_LAUGH
+		if object.laughPlayed == false
+			PlaySfx(SfxName[EggLaugh], false)
+			object.laughPlayed = true
+		end if
 		temp0 = object.animationTimer
 		temp0 %= 10
 		temp0 /= 5
@@ -631,6 +653,8 @@ event ObjectDraw
 
 	end switch
 
+	object.frame = temp0
+
 	switch object[-1].flameAnim
 	case FLAME_INACTIVE
 	default
@@ -657,6 +681,19 @@ event ObjectDraw
 		break
 
 	end switch
+
+	if object.animation != GHZEGGANI_INVISIBLE
+		if object.value17 != 0
+			object.inkEffect = INK_ALPHA
+			object.alpha = 120
+			DrawSpriteFX(object.frame, FX_FLIP, object.value13, object.value14)
+			object.alpha = 80
+			DrawSpriteFX(object.frame, FX_FLIP, object.value15, object.value16)
+			object.alpha = 40
+			DrawSpriteFX(object.frame, FX_FLIP, object.value17, object.value18)
+			object.inkEffect = INK_NONE
+			end if
+	end if
 end event
 
 

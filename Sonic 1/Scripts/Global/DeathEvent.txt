@@ -38,31 +38,152 @@ private alias 4 : STAGE_P_CONTINUE
 event ObjectUpdate
 	switch object.state
 	case DEATHEVENT_GAMEOVER
-#platform: USE_ORIGINS
-		if game.playMode == BOOT_PLAYMODE_CLASSIC
-			CheckEqual(object.timeOver, false)
-			temp0 = checkResult
-			CheckEqual(stage.minutes, 9)
-			temp0 &= checkResult
-			CheckEqual(stage.seconds, 59)
-			temp0 &= checkResult
-			CheckEqual(stage.milliSeconds, 99)
-			temp0 &= checkResult
-			temp0 |= game.timeOver
-			
-			if temp0 != false
-				if player.continues == 0
-					object.timeOver = true
-				else
-					recMilliSeconds = 0
-					recSeconds = 0
-					recMinutes = 0
-					game.timeOver = false
-				end if
+		if object.leftTextPos != 0
+			StopMusic()
+			SetMusicTrack("man.ogg", 5,      1) // Load man.ogg into track 5 with loop!
+			PlayMusic(5)
+			object.leftTextPos = 0
+			object.rightTextPos = 0 // Reset rightTextPos to 0 so the countdown does not run automatically!
+			object.timer = 0
+			object.visible = true // Force visible to draw the tree
+			object[9].type = TypeName[Blank Object] // Hide HUD completely
+			object[1].visible = false // Hide player 2
+
+			// Load custom palette once during initialization
+			LoadPalette("Man", 0, 0, 0, 255)
+			end if
+
+		// Overwrite the first few colors of the active palette as a safeguard for correct tree colors
+		SetPaletteEntry(0, 128, 0x000000)
+		SetPaletteEntry(0, 129, 0x0B0B32)
+		SetPaletteEntry(0, 130, 0x202040)
+		SetPaletteEntry(0, 131, 0x612C61)
+		SetPaletteEntry(0, 132, 0xA00080)
+		SetPaletteEntry(0, 133, 0xC00080)
+		SetPaletteEntry(0, 134, 0xE02040)
+		SetPaletteEntry(0, 135, 0xFF8080)
+
+		// Fade-in the black background and centered tree in half a second
+		if object.timer < 255
+			object.timer += 9
+			if object.timer > 255
+				object.timer = 255
 			end if
 		end if
+
+		// Animate the tree parts every 0.25s (15 frames at 60 FPS) across an 8-step cycle
+		object.animationTimer++
+		temp0 = object.animationTimer
+		temp0 /= 15
+		temp0 %= 8
+
+		// Purple Foliage offsets (value5 = X, value6 = Y): 2x UP, 2x LEFT, 2x DOWN, 2x RIGHT
+		switch temp0
+		case 0
+			object.value5 = 0
+			object.value6 = -1
+			break
+		case 1
+			object.value5 = 0
+			object.value6 = -2
+			break
+		case 2
+			object.value5 = -1
+			object.value6 = -2
+			break
+		case 3
+			object.value5 = -2
+			object.value6 = -2
+			break
+		case 4
+			object.value5 = -2
+			object.value6 = -1
+			break
+		case 5
+			object.value5 = -2
+			object.value6 = 0
+			break
+		case 6
+			object.value5 = -1
+			object.value6 = 0
+			break
+		case 7
+			object.value5 = 0
+			object.value6 = 0
+			break
+		end switch
+
+		// Red Foliage offsets (value7 = X, value8 = Y): 2x DOWN, 2x RIGHT, 2x UP, 2x LEFT
+		switch temp0
+		case 0
+			object.value7 = 0
+			object.value8 = 1
+			break
+		case 1
+			object.value7 = 0
+			object.value8 = 2
+			break
+		case 2
+			object.value7 = 1
+			object.value8 = 2
+			break
+		case 3
+			object.value7 = 2
+			object.value8 = 2
+			break
+		case 4
+			object.value7 = 2
+			object.value8 = 1
+			break
+		case 5
+			object.value7 = 2
+			object.value8 = 0
+			break
+		case 6
+			object.value7 = 1
+			object.value8 = 0
+			break
+		case 7
+			object.value7 = 0
+			object.value8 = 0
+			break
+		end switch
+
+		// Wait for interaction button to exit
+		temp0 = false
+		if keyPress[0].buttonA == true
+			temp0 = true
+		end if
+		if keyPress[0].buttonB == true
+			temp0 = true
+		end if
+		if keyPress[0].buttonC == true
+			temp0 = true
+		end if
+		if keyPress[0].start == true
+			temp0 = true
+		end if
+#platform: MOBILE
+		CheckTouchRect(0, 0, screen.xsize, screen.ysize)
+		if checkResult > -1
+			temp0 = true
+		end if
 #endplatform
-		// [Fall-through]
+
+		if temp0 == true
+			PlaySfx(SfxName[Weird], false)
+			recStageList = stage.activeList
+			recStage = stage.listPos
+			stage.activeList = PRESENTATION_STAGE
+			stage.listPos = STAGE_P_TITLE
+#platform: USE_STANDALONE
+			engine.state = 8
+#endplatform
+			lampPostID = 0
+			LoadStage()
+		end if
+		break
+
 	case DEATHEVENT_TIMEOVER
 #platform: USE_ORIGINS
 		object.timeOver |= object.state
@@ -312,8 +433,28 @@ end event
 event ObjectDraw
 	switch object.state
 	case DEATHEVENT_GAMEOVER
-		DrawSpriteScreenXY(0, object.leftTextPos, 96)
-		DrawSpriteScreenXY(2, object.rightTextPos, 96)
+		// Draw Solid Black Background with fade-in alpha
+		DrawRect(0, 0, screen.xsize, screen.ysize, 0x00, 0x00, 0x00, object.timer)
+
+		object.inkEffect = INK_ALPHA
+		object.alpha = object.timer
+
+		// 1. Draw static Trunk (Sprite #3 - Back layer)
+		DrawSpriteScreenXY(3, screen.xcenter, screen.ycenter)
+
+		// 2. Draw moving Purple Foliage (Sprite #4 - Middle layer)
+		temp1 = screen.xcenter
+		temp1 += object.value5
+		temp2 = screen.ycenter
+		temp2 += object.value6
+		DrawSpriteScreenXY(4, temp1, temp2)
+
+		// 3. Draw moving Red Foliage (Sprite #5 - Front layer)
+		temp1 = screen.xcenter
+		temp1 += object.value7
+		temp2 = screen.ycenter
+		temp2 += object.value8
+		DrawSpriteScreenXY(5, temp1, temp2)
 		break
 
 	case DEATHEVENT_TIMEOVER
@@ -332,6 +473,11 @@ event ObjectStartup
 	SpriteFrame(0, 0, 64, 16, 1, 239) 		// 0 - "Game"
 	SpriteFrame(0, 0, 56, 16, 66, 239) 		// 1 - "Time"
 	SpriteFrame(0, 0, 64, 16, 123, 239) 	// 2 - "Over"
+
+	LoadSpriteSheet("Man/Man.gif")
+	SpriteFrame(-25, 2, 58, 44, 28, 48) 		// 3 - Trunk
+	SpriteFrame(-43, -30, 87, 47, 115, 16) 		// 4 - Purple Foliage
+	SpriteFrame(-52, -45, 105, 68, 213, 1) 		// 5 - Red Foliage
 end event
 
 

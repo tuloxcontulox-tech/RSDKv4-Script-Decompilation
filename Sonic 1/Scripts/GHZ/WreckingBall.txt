@@ -10,6 +10,12 @@
 // ========================
 
 private alias object.value0 : object.timer
+private alias object.value10 : object.spinAngle
+private alias object.value11 : object.prevRotation
+
+// Player Aliases
+private alias object.animation : player.animation
+private alias 32 : ANI_HURT
 
 // States
 private alias 0 : WRECKINGBALL_INACTIVE
@@ -22,6 +28,13 @@ private alias 2 : WRECKINGBALL_EXPLODE
 // ========================
 
 event ObjectUpdate
+	if object.state == WRECKINGBALL_ACTIVE
+		object.timer++
+		if object.timer >= 240
+			object.timer = 0
+		end if
+	end if
+
 	if object.state == WRECKINGBALL_EXPLODE
 		object.rotation *= 248
 		object.rotation >>= 8
@@ -52,23 +65,86 @@ event ObjectUpdate
 				CallFunction(Player_Hit)
 			end if
 		end if
+
+		// Check if player got hurt to trigger laughing face!
+		if player[currentPlayer].animation == ANI_HURT
+			object.value9 = 120 // laugh for 2 seconds (120 frames)
+		end if
 	next
+
+	if object.value9 > 0
+		object.value9--
+	end if
+
+	// Wrecking Ball Trail position tracker
+	object.value20++
+	if object.value20 >= 2
+		object.value20 = 0
+		object.value12 = object.value14
+		object.value13 = object.value15
+		object.value14 = object.value16
+		object.value15 = object.value17
+		object.value16 = object.value18
+		object.value17 = object.value19
+		object.value18 = object.xpos
+		object.value19 = object.ypos
+	end if
 end event
 
 
 event ObjectDraw
-	// Draw Wrecking ball
-	temp0 = object.rotation
-	temp0 += 8
-	temp0 >>= 4
-	temp0 &= 7
-	temp0++
-	DrawSprite(temp0)
+	// If the boss was hit recently, use one of the laughing/other faces (frames 2 to 8).
+	// Otherwise, keep the first/normal face static (frame 1).
+	if object.value9 > 0
+		temp0 = object.timer
+		temp0 /= 15 // Animate slightly faster when laughing!
+		temp0 %= 7
+		temp0 += 2
+	else
+		temp0 = 1
+	end if
 
-	// Draw Shine Overlay
-	object.inkEffect = INK_ADD
-	object.alpha = 160
-	DrawSpriteFX(0, FX_INK, object.xpos, object.ypos)
+	temp1 = object.rotation
+	if object.state == WRECKINGBALL_ACTIVE
+		object.spinAngle = object.rotation
+		object.spinAngle -= 128
+		object.spinAngle &= 511
+	else
+		object.spinAngle = 0
+	end if
+
+	// Dibujar trail con rotacion combinada con tinta
+	if object.value12 != 0
+		temp5 = object.rotation
+		object.rotation = object.spinAngle
+		object.inkEffect = INK_ALPHA
+		temp2 = FX_ROTATE
+		temp2 |= FX_INK
+
+		// Copia 4 (Mas lejana / mas transparente)
+		object.alpha = 40
+		DrawSpriteFX(temp0, temp2, object.value12, object.value13)
+
+		// Copia 3
+		object.alpha = 80
+		DrawSpriteFX(temp0, temp2, object.value14, object.value15)
+
+		// Copia 2
+		object.alpha = 120
+		DrawSpriteFX(temp0, temp2, object.value16, object.value17)
+
+		// Copia 1 (Mas cercana / mas visible)
+		object.alpha = 160
+		DrawSpriteFX(temp0, temp2, object.value18, object.value19)
+
+		object.inkEffect = INK_NONE
+		object.rotation = temp5
+	end if
+
+	// Dibujar la bola principal
+	object.rotation = object.spinAngle
+	DrawSpriteFX(temp0, FX_ROTATE, object.xpos, object.ypos)
+	object.rotation = temp1
 end event
 
 
@@ -94,7 +170,6 @@ end event
 event RSDKDraw
 	DrawSprite(1)
 	
-	// Draw Shine Overlay
 	object.inkEffect = INK_ADD
 	object.alpha = 160
 	DrawSpriteFX(0, FX_INK, object.xpos, object.ypos)
@@ -103,8 +178,8 @@ end event
 
 event RSDKLoad
 	LoadSpriteSheet("GHZ/Objects2.gif")
-	SpriteFrame(-24, -24, 48, 48, 1, 77)    // Shine Overlay
-	SpriteFrame(-24, -24, 48, 48, 50, 77) 	// Wrecking Ball
+	SpriteFrame(-24, -24, 48, 48, 1, 77)
+	SpriteFrame(-24, -24, 48, 48, 50, 77)
 	
 	SetVariableAlias(ALIAS_VAR_PROPVAL, "unused")
 end event

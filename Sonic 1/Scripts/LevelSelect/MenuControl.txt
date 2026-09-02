@@ -69,14 +69,14 @@ public alias 5 : PLAYER_AMY_A
 public alias 6 : PLAYER_AMY_TAILS_A
 
 // Music loops
-private alias 635050 : MUSIC_LOOP_GHZ // 635970 in older S1 versions, changed some time around 1.0.7
-private alias 99380  : MUSIC_LOOP_MZ
-private alias 100712 : MUSIC_LOOP_SYZ // This is 101364 in the normal stage...
-private alias 84444  : MUSIC_LOOP_LZ
-private alias 84364  : MUSIC_LOOP_SLZ
-private alias 1      : MUSIC_LOOP_SBZ
-private alias 84680  : MUSIC_LOOP_FINAL
-private alias 39528  : MUSIC_LOOP_INV
+private alias true : MUSIC_LOOP_GHZ // 635970 in older S1 versions, changed some time around 1.0.7
+private alias true : MUSIC_LOOP_MZ
+private alias true : MUSIC_LOOP_SYZ // This is 101364 in the normal stage...
+private alias true : MUSIC_LOOP_LZ
+private alias true : MUSIC_LOOP_SLZ
+private alias true : MUSIC_LOOP_SBZ
+private alias true : MUSIC_LOOP_FINAL
+private alias true : MUSIC_LOOP_INV
 
 // Music Event Aliases
 private alias 25 : SLOT_MUSICEVENT_CHANGE
@@ -249,22 +249,22 @@ private function MenuControl_PlaySong
 			break
 
 		case 9
-			SetMusicTrack("SpecialStage.ogg", 0, true)
+			SetMusicTrack("SpecialStage.ogg", 0,      1)
 			PlayMusic(0)
 			break
 
 		case 10
-			SetMusicTrack("Titlescreen.ogg", 0, false)
+			SetMusicTrack("Titlescreen.ogg", 0,  1)
 			PlayMusic(0)
 			break
 
 		case 11
-			SetMusicTrack("Ending.ogg", 0, false)
+			SetMusicTrack("Ending.ogg", 0,  1)
 			PlayMusic(0)
 			break
 
 		case 12
-			SetMusicTrack("Boss.ogg", 0, true)
+			SetMusicTrack("Boss.ogg", 0,      1)
 			PlayMusic(0)
 			break
 
@@ -274,27 +274,27 @@ private function MenuControl_PlaySong
 			break
 
 		case 14
-			SetMusicTrack("ActComplete.ogg", 0, false)
+			SetMusicTrack("ActComplete.ogg", 0,  1)
 			PlayMusic(0)
 			break
 
 		case 15
-			SetMusicTrack("GameOver.ogg", 0, false)
+			SetMusicTrack("GameOver.ogg", 0,   1)
 			PlayMusic(0)
 			break
 
 		case 16
-			SetMusicTrack("Continue.ogg", 0, false)
+			SetMusicTrack("Continue.ogg", 0,  1)
 			PlayMusic(0)
 			break
 
 		case 17
-			SetMusicTrack("Credits.ogg", 0, false)
+			SetMusicTrack("Credits.ogg", 0,  1)
 			PlayMusic(0)
 			break
 
 		case 18
-			SetMusicTrack("Drowning.ogg", 0, false)
+			SetMusicTrack("Drowning.ogg", 0,  1)
 			PlayMusic(0)
 			break
 			

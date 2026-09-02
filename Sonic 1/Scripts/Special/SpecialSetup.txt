@@ -703,8 +703,8 @@ end event
 
 
 event ObjectStartup
-	SetMusicTrack("Specialstage.ogg", TRACK_STAGE, true)
-	SetMusicTrack("ActComplete.ogg", TRACK_ACTFINISH, false)
+	SetMusicTrack("Specialstage.ogg", TRACK_STAGE,      1)
+	SetMusicTrack("ActComplete.ogg", TRACK_ACTFINISH,  1)
 
 	if options.gameMode == MODE_TIMEATTACK
 		object[SLOT_HUD].type = TypeName[HUD]
